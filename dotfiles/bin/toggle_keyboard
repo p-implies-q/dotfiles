@@ -1,0 +1,13 @@
+#!/bin/sh
+
+FILE="/tmp/kb_state"
+KB="AT Translated Set 2 keyboard"
+
+if [[ -e $FILE && `cat $FILE` -eq 0 ]];
+then
+    xinput enable "$KB"
+    echo 1 > $FILE
+else
+    xinput disable "$KB"
+    echo 0 > $FILE
+fi

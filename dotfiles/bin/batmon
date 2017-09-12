@@ -1,0 +1,55 @@
+#!/bin/sh
+#
+
+## Setup script parameters ##
+
+WAV_FILE="/home/david/sys/docs/sounds/danger.wav"
+# Actions to be taken at low battery
+function battery_action {
+    notify-send -u critical -t 5000 "Battery low"
+    aplay $WAV_FILE
+    has_issued="yes"
+}
+
+WARN_LEVEL=10  # At which percent to run battery_action
+SLEEP_TIME=60  # How many seconds to sleep between checks
+
+
+## Actual script ##
+
+# The function that updates the current charge and the state
+function update_state {
+    charge=$(echo "100*`cat /sys/class/power_supply/BAT0/energy_now` /\
+                       `cat /sys/class/power_supply/BAT0/energy_full`" | bc -l)
+    charge=${charge%.*}
+    state=`cat /sys/class/power_supply/BAT0/status`
+}
+
+# Switch ISSUED_WARNING to "yes" after 1 warning, and back to "no" after
+# charging back up above WARN_LEVEL. Avoids repeating warnings.
+has_issued="no"
+
+
+while [ true ]; do
+    sleep $SLEEP_TIME
+
+    update_state
+    old_state=$state
+
+    echo $has_issued
+    # Issue a warning if we haven't yet, and the charge is below warn-level and
+    # we're discharging.
+    if [ "$charge" -lt "$WARN_LEVEL" ] &&
+       [ "$state" = "Discharging" ] &&
+       [ "$has_issued" = "no" ]
+        then
+        battery_action
+    fi
+
+    # If we're now charging, set has_issued to false
+    if [ "$has_issued" = "yes" ] &&
+       [ "$state" = "Charging" ]
+        then
+        has_issued="no"
+    fi
+done

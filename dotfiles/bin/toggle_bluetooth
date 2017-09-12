@@ -1,0 +1,66 @@
+#!/bin/sh
+#
+# Set the bluetooth state. If called without argument, toggle the state. If
+# called with a 0 or 1, set the state to off or on respectively. If called with
+# -v, display a message with notify-send
+#
+
+VERBOSE=false
+TOGGLE=true
+# Check for a -v flag to toggle on verbosity and a -s flag to provide a state
+while getopts ":s:v" opt; do
+  case $opt in
+    v)
+      VERBOSE=true >&2
+      ;;
+    s)
+      TOGGLE=false
+      NEW_VAL=$OPTARG
+      ;;
+    \?)
+      echo "Invalid option: -$OPTARG" >&2
+      exit 1
+      ;;
+    :)
+      echo "Option -$OPTARG expects a value" >&2
+      exit 1
+      ;;
+  esac
+done
+
+FILENAME=/sys/devices/platform/thinkpad_acpi/bluetooth_enable
+
+if $TOGGLE; then
+    # If toggling, get state from file and set NEW_VAL to new state
+    if [ `cat $FILENAME` -eq 1 ];
+    then
+        NEW_VAL=0
+    else
+        NEW_VAL=1
+    fi
+else
+    # If we're *not* toggling, make sure we get a 0 or a 1
+    if ! [[ $NEW_VAL == 0 || $NEW_VAL == 1 ]]; then
+        echo "New value must be 0 or 1"
+        exit 1
+    fi
+fi
+
+# Echo the value into the file and display the message
+echo $NEW_VAL > $FILENAME
+
+# If called as toggle, display a message
+# Set the message depending on the new bluetooth value
+if $VERBOSE; then
+    if [ $NEW_VAL -eq 0 ]; then
+        MSG="Bluetooth OFF"
+    else
+        MSG="Bluetooth ON"
+    fi
+    notify-send $MSG
+fi
+
+
+
+
+

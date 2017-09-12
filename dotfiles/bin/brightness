@@ -1,0 +1,45 @@
+#!/usr/bin/env python
+
+BRIGHTNESS_FILE = "/sys/class/backlight/intel_backlight/brightness"
+
+def get_brightness():
+    with open(BRIGHTNESS_FILE, 'r') as f:
+        return int(f.readline().strip())
+
+def set_brightness(n):
+    with open(BRIGHTNESS_FILE, 'w') as f:
+        f.write(str(n))
+
+def main():
+    import sys
+
+    arg = sys.argv[1]
+    percentage = False
+    if arg.endswith('%'):
+        percentage = True
+        arg = arg.strip('%')
+
+    mod = None
+    if arg[0] in ['+', '-']:
+        mod = arg[0]
+        arg = arg[1:]
+
+    n = int(arg)
+
+    if percentage:
+        n = n * get_brightness() / 100
+
+    if mod:
+        if mod == '+':
+            new = int(get_brightness() + n) + 1
+        else:
+            new = int(get_brightness() - n)
+    else:
+        new = n
+    new = int(new)
+    print(new)
+    set_brightness(new)
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,19 @@
+# #!/bin/sh
+
+
+xset dpms force off
+
+# # Get the current state py parsing the output of xset q
+# # Then decide the new value for the screensaver
+# CURRENT_STATE=`xset q | grep -A 2 Screen | tail -n 1 | awk '{print $2}'`
+# echo $CURRENT_STATE
+# if [ $CURRENT_STATE -eq 0 ];
+# then
+#     xset s on
+#     xset -dpms
+#     notify-send "Screensaver ON"
+# else
+#     xset s off
+#     xset +dpms
+#     notify-send "Screensaver OFF"
+# fi

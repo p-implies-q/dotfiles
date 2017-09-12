@@ -1,0 +1,6 @@
+#!/bin/sh
+
+FILE=$HOME/docs/sounds/bell.wav
+
+TIME=`echo "$1 * 60" | bc -l`
+aplay $FILE && sleep $TIME && aplay $FILE

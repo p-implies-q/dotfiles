@@ -1,0 +1,28 @@
+#!/bin/sh
+
+# Grab the PID of the second Xorg server, if this exists, we're running our external monitor already.
+PID=$(ps ax | grep Xorg | grep :8 | grep -v grep | awk '{print $1}')
+
+if [ "$1" = "on" ]
+then
+    if [ ! -z $PID ]
+    then
+        echo "Already running"
+    else
+        primusrun true
+        intel-virtual-output
+        xrandr --output LVDS1 --auto --output VIRTUAL5 --mode VIRTUAL5.641-1920x1200 --primary --left-of LVDS1
+        /home/david/sys/bin/set_bg
+    fi
+elif [ "$1" = "off" ]
+then
+    if [ ! -z $PID ]
+    then
+        sudo kill -15 $PID
+        xrandr --output VIRTUAL5 --off
+    else
+        echo "Already off"
+    fi
+else
+    echo "USAGE: external_monitor {on, off}"
+fi
