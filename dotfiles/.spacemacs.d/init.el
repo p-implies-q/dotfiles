@@ -21,14 +21,15 @@ values."
      javascript
      purescript
      react
-     (auto-completion :variables
-                      auto-completion-complete-with-key-sequence-delay 0.01)
+     (auto-completion
+      (haskell :variables haskell-completion-backend 'intero)
+      :variables auto-completion-complete-with-key-sequence-delay 0.01)
      (elfeed :variables rmh-elfeed-org-files '("~/.emacs.d/private/elfeed.org"))
      emacs-lisp
      evil-cleverparens
      git
      (haskell :variables haskell-enable-ghc-mod-support nil
-              haskell-process-type 'stack-ghci)
+                         haskell-process-type 'stack-ghci)
      html
      latex
      markdown
@@ -43,7 +44,7 @@ values."
             shell-default-term-shell "/bin/zsh"
             shell-default-position 'bottom)
      sml
-     spell-checking
+     ;; spell-checking
      syntax-checking
      theming
      yaml
@@ -55,7 +56,7 @@ values."
    dotspacemacs-additional-packages '(
                                       )
    ;; A list of packages and/or extensions that will not be install and loaded.
-   dotspacemacs-excluded-packages '()
+   dotspacemacs-excluded-packages '(exec-path-from-shell)
    ;; If non-nil spacemacs will delete any orphan packages, i.e. packages that
    ;; are declared in a layer which is not a member of
    ;; the list `dotspacemacs-configuration-layers'. (default t)

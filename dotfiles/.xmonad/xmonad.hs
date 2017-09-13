@@ -1,14 +1,9 @@
 import XMonad
 
--- import XMonad.Keys
 
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
-
--- import Hydras
-
--- import XMonad.Keys.Core
 
 import XMonad.Util.Run(spawnPipe)
 import XMonad.Util.Paste (sendKey)
@@ -86,7 +81,6 @@ myLayout = tiled
   where
     tiled = avoidStruts . smartBorders $ ResizableTall 1 (3/100) (1/2) []
 
-
 myManageHook = composeAll
     [ className =? "Gimp"           --> doFloat
     , className =? "Inkscape"       --> doFloat
@@ -95,7 +89,6 @@ myManageHook = composeAll
     , resource  =? "desktop_window" --> doIgnore
     , manageDocks <+> manageHook def
     , isFullscreen --> doFullFloat ]
-
 
 myTerminal          = "termite"
 myFocusFollowsMouse = False

@@ -1,0 +1,10 @@
+import XMonad.Config
+import XMonad.Contrib
+import XMonad
+:hoogle Int -> String
+:doc Int -> Int -> Int
+:hoogle Int -> Int
+:hoogle a -> a
+:hoogle a -> a
+hoogle (+)
+hoogle
