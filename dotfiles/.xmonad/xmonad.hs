@@ -59,6 +59,7 @@ main = do
 
 myStartupHook = do
   spawn "xsetroot -solid '#282828'"
+  spawn "setxkbmap us,us -variant colemak, -option ctrl:nocaps,ctrl:nocaps"
 
 myLogHook :: Handle -> X ()
 myLogHook h = dynamicLogWithPP $ def
@@ -114,6 +115,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm,               xK_s     ), spawn "termite")
     , ((modm,               xK_t     ), spawn "yeganesh -x | /bin/sh")
     , ((modm,               xK_Tab   ), spawn "password-store")
+    , ((modm .|. shiftMask, xK_Tab   ), spawn "password-store --type")
     , ((modm,               xK_d     ), kill)
     , ((modm,               xK_q     ), sendMessage Shrink)
     , ((modm,               xK_w     ), sendMessage Expand)
