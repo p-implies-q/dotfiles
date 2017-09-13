@@ -60,6 +60,7 @@ main = do
 myStartupHook = do
   spawn "xsetroot -solid '#282828'"
   spawn "setxkbmap us,us -variant colemak, -option ctrl:nocaps,ctrl:nocaps"
+  spawn "xcape"
 
 myLogHook :: Handle -> X ()
 myLogHook h = dynamicLogWithPP $ def
