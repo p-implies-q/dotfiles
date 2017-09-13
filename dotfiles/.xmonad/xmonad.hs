@@ -113,7 +113,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm,               xK_r     ), spawn "vivaldi")
     , ((modm,               xK_s     ), spawn "termite")
     , ((modm,               xK_t     ), spawn "yeganesh -x | /bin/sh")
-    , ((modm,               xK_Tab   ), spawn "password-store --type")
+    , ((modm,               xK_Tab   ), spawn "password-store")
     , ((modm,               xK_d     ), kill)
     , ((modm,               xK_q     ), sendMessage Shrink)
     , ((modm,               xK_w     ), sendMessage Expand)
