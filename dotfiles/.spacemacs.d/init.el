@@ -253,6 +253,18 @@ before packages are loaded. If you are unsure, you should try in setting them in
 
 (defun dotspacemacs/user-config ()
 
+  ;; (defun magit-single-window ()
+  ;;     (let ((display-buffer-alist `(("^\\*magit: "
+  ;;     display-buffer-same-window)
+  ;;     ,display-buffer-alist))) (magit-status))')
+
+  (defun magit-single-window ()
+    (interactive)
+    (let ((display-buffer-alist `(("^\\*magit: " display-buffer-same-window),
+                                  display-buffer-alist)))
+      (progn (magit-status)
+             (delete-other-windows))))
+
   ;; The sequence of keys that causes an 'esc' to occur
   (setq-default evil-escape-key-sequence "fp")
 
