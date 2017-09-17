@@ -12,7 +12,7 @@ in
       hs
       # apply-refact
       hasktags
-      hlint
+      # hlint
       hspec
       intero
       stack

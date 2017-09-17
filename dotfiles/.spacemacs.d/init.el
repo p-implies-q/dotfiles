@@ -45,7 +45,7 @@ values."
             shell-default-position 'bottom)
      sml
      ;; spell-checking
-     syntax-checking
+     (syntax-checking :variables syntax-checking-enable-by-default t)
      theming
      yaml
    )

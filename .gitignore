@@ -2,3 +2,4 @@
 *xmonad.o
 *xmonad.state
 /dotfiles/.xmonad/xmonad.errors
+/dotfiles/.ghc/ghci_history
