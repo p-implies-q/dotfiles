@@ -19,12 +19,16 @@ import XMonad.Layout.Fullscreen
 import System.IO
 import System.Exit
 
+import Network.Socket hiding (sendAll)
+import Network.Socket.ByteString.Lazy (sendAll)
+
+import Data.ByteString.Lazy.Char8 (pack)
 import Data.Monoid
 import Control.Monad (when)
 
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
-
+import qualified Data.Set        as S
 
 
 main :: IO ()
@@ -48,6 +52,8 @@ main = do
       -- hooks, layouts
         layoutHook         = myLayout,
         manageHook         = myManageHook,
+        -- logHook            = myLogHook xmproc,
+        -- logHook            = myLogHook2,
         logHook            = myLogHook xmproc,
         startupHook        = myStartupHook
         }
@@ -74,6 +80,32 @@ myLogHook h = dynamicLogWithPP $ def
      , ppOutput            = hPutStrLn h
    }
 
+myLogHook2 :: X ()
+myLogHook2 = do
+
+  dynamicLogWithPP $ def
+    {
+      ppCurrent       = \s -> "[" ++ s ++ "]"
+    , ppVisible       = id
+    , ppWsSep         = " "
+    , ppSep           = "  "
+    , ppLayout            = (\x -> case x of
+                                   "Spacing 10 ResizableTall"-> "V"
+                                   "ResizableTall"           -> ">"
+                                   "Full"                    -> "^"
+                                   _                         -> x
+                               )
+     , ppTitle             = take 40
+     , ppOutput            = send
+    }
+  where
+    send :: String -> IO ()
+    send s = do
+      sock <- socket AF_INET Stream 0
+      setSocketOption sock ReuseAddr 1
+      connect sock $ SockAddrInet 45678 $ tupleToHostAddress (127, 0, 0, 1)
+      sendAll sock . pack $ s
+      close sock
 
 myLayout = tiled
        ||| spacing 10 tiled
@@ -100,16 +132,25 @@ myBorderWidth = 2
 myNormalBorderColor = "#282828"
 myFocusedBorderColor = "#928374"
 
+
+-- emacsclient -nc -F "(quote (name . \"capture\"))" --eval "(make-capture-frame)"
+captureCmd = "emacsclient -nc -F " ++ traits ++ " --eval " ++ cmd ++ " &>/tmp/err"
+  where
+    name   = show $ "capture"
+    traits = show $ "(quote (name . " ++ name ++ "))"
+    cmd    = show $ "(make-capture-frame)"
+
 -- Hopefully all this will soon be replaced with hydras
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     [
       -- ((0,                  xK_Print ), runMenu mMain)
       ((modm,               xK_a     ), spawn "emacsclient -c")
-    , ((modm,               xK_r     ), spawn "vivaldi")
+    , ((modm,               xK_r     ), spawn "chromium")
     , ((modm,               xK_s     ), spawn "termite")
     , ((modm,               xK_t     ), spawn "yeganesh -x | /bin/sh")
     , ((modm,               xK_Tab   ), spawn "password-store")
     , ((modm .|. shiftMask, xK_Tab   ), spawn "password-store --type")
+    , ((modm,            xK_semicolon), spawn captureCmd)
     , ((modm,               xK_d     ), kill)
     , ((modm,               xK_q     ), sendMessage Shrink)
     , ((modm,               xK_w     ), sendMessage Expand)

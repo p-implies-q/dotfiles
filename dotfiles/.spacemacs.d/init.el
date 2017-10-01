@@ -5,47 +5,34 @@
 You should not put any user code in this function besides modifying the variable
 values."
   (setq-default
-   ;; Base distribution to use. This is a layer contained in the directory
-   ;; `+distribution'. For now available distributions are `spacemacs-base'
-   ;; or `spacemacs'. (default 'spacemacs)
    dotspacemacs-distribution 'spacemacs
-   ;; List of additional paths where to look for configuration layers.
-   ;; Paths must have a trailing slash (i.e. `~/.mycontribs/')
    dotspacemacs-configuration-layer-path '()
-   ;; List of configuration layers to load. If it is the symbol `all' instead
-   ;; of a list then all discovered layers will be installed.
+
    dotspacemacs-configuration-layers
    '(
-     themes-megapack
-     shell-scripts
-     javascript
-     purescript
-     react
      (auto-completion
       (haskell :variables haskell-completion-backend 'intero)
       :variables auto-completion-complete-with-key-sequence-delay 0.01)
-     (elfeed :variables rmh-elfeed-org-files '("~/.emacs.d/private/elfeed.org"))
      emacs-lisp
      evil-cleverparens
      git
      (haskell :variables haskell-enable-ghc-mod-support nil
-                         haskell-process-type 'stack-ghci)
+              haskell-process-type 'stack-ghci)
      html
+     javascript
      latex
      markdown
+     (mu4e :variables
+           mu4e-installation-path "/run/current-system/sw/share/emacs/site-lisp")
      nixos
-     octave
      org
      pandoc
+     purescript
      python
-     (shell :variables
-            shell-default-height 30
-            shell-default-shell 'multi-term
-            shell-default-term-shell "/bin/zsh"
-            shell-default-position 'bottom)
+     shell-scripts
      sml
-     ;; spell-checking
      (syntax-checking :variables syntax-checking-enable-by-default t)
+     themes-megapack
      theming
      yaml
    )
@@ -53,8 +40,9 @@ values."
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages, then consider creating a layer. You can also put the
    ;; configuration in `dotspacemacs/user-config'.
-   dotspacemacs-additional-packages '(
-                                      )
+   dotspacemacs-additional-packages '(bbdb-handy
+                                      noflet)
+
    ;; A list of packages and/or extensions that will not be install and loaded.
    dotspacemacs-excluded-packages '(exec-path-from-shell)
    ;; If non-nil spacemacs will delete any orphan packages, i.e. packages that
@@ -254,11 +242,6 @@ before packages are loaded. If you are unsure, you should try in setting them in
 
 (defun dotspacemacs/user-config ()
 
-  ;; (defun magit-single-window ()
-  ;;     (let ((display-buffer-alist `(("^\\*magit: "
-  ;;     display-buffer-same-window)
-  ;;     ,display-buffer-alist))) (magit-status))')
-
   (defun magit-single-window ()
     (interactive)
     (let ((display-buffer-alist `(("^\\*magit: " display-buffer-same-window),
@@ -269,15 +252,28 @@ before packages are loaded. If you are unsure, you should try in setting them in
   ;; The sequence of keys that causes an 'esc' to occur
   (setq-default evil-escape-key-sequence "fp")
 
-  ;; The entire org-mode configuration
+  ;; ORG-MODE
   (with-eval-after-load 'org
+
+    ;; Set up org-directories
+    (setq org-directory         "~/org"
+          org-archive-location  "~/org/archive"
+          org-agenda-files      '("~/org/plan.org"
+                                  "~/org/appts.org"))
 
     ;; Basic properties
     (setq org-agenda-dim-blocked-tasks                       nil
+          org-agenda-window-setup                            'only-window
           org-cycle-separator-lines                          0
+          org-hide-leading-stars                             t
           org-indirect-buffer-display                        'current-window
           org-link-frame-setup                               '(file . find-file)
+          org-log-done                                       t
+          org-outline-path-complete-in-steps                 nil
+          org-refile-allow-creating-parent-nodes             'confirm
+          org-refile-use-outline-path                        t
           org-return-follows-link                            t
+          org-reverse-note-order                             t
           org-special-ctrl-a/e                               t
           org-src-fontify-natively                           t
           org-startup-indented                               t
@@ -290,21 +286,32 @@ before packages are loaded. If you are unsure, you should try in setting them in
 
     ;; Capture-templates
     (setq org-capture-templates
-          (quote (("t" "todo" entry (file "~/docs/org/refile.org")
-                   "* TODO %?\n%U\n%a\n" :clock-in t :clock-resume t)
-                  ("n" "note" entry (file "~/docs/org/refile.org")
-                   "* %? :NOTE:\n%U\n%a\n" :clock-in t :clock-resume t)
-                  ("j" "Journal" entry (file+datetree "~/docs/org/diary.org")
-                   "* %?\n%U\n" :clock-in t :clock-resume t)
-                  ("w" "org-protocol" entry (file "~/docs/org/refile.org")
-                   "* TODO Review %c\n%U\n" :immediate-finish t))))
+          (quote (("t" "todo" entry (file+headline "~/org/plan.org" "Todos")
+                   "* TODO %? %^g\n" :kill-buffer)
+                  ("T" "todo-here" entry (file+headline "~/org/plan.org" "Todos")
+                   "* TODO %? %^g\n%a\n" :kill-buffer)
+                  ("a" "appt" entry (file+datetree+prompt "~/org/appts.org")
+                   "* TODO %? %^g\n%T" :kill-buffer)
+                  ("n" "note" entry (file "~/org/refile.org")
+                   "* %? :NOTE:\n%U\n%a\n" :kill-buffer)
+                  ("j" "journal" entry (file+datetree "~/org/journal.org")
+                   "* %?\n%U\n" :kill-buffer)
+                  ("w" "org-protocol" entry (file "~/org/refile.org")
+                   "* TODO Review %c\n%U\n" :immediate-finish t :kill-buffer))))
 
     ;; Todo-keyword options
     (setq org-todo-keywords
           '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
-            (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)")))
+            (sequence "WAITING(w@/!)" "|" "CANCELLED(c@/!)")))
 
-    ;; enable auto-fill-mode and indent-mode
+    ;; Standard tags
+    (setq org-tag-alist '(("work"         . "?w")
+                          ("maintenance"  . "?m")
+                          ("admin"        . "?a")))
+
+
+
+    ;; enable auto-fill-mode
     (add-hook 'org-mode-hook
               '(lambda ()
                  (auto-fill-mode)))
@@ -312,15 +319,23 @@ before packages are loaded. If you are unsure, you should try in setting them in
     ;; Configure refiling behavior
     (setq org-refile-targets (quote ((nil :maxlevel . 9)
                                      (org-agenda-files :maxlevel . 9))))
-    (setq org-refile-use-outline-path t)
-    (setq org-outline-path-complete-in-steps nil)
-    (setq org-refile-allow-creating-parent-nodes (quote confirm))
-
     ;; Set the file-openers
     (setq org-file-apps '(("\\.pdf\\'"    . "zathura %s")
                           (auto-mode      . emacs)
                           ("\\.mm\\'"     . default)
-                          ("\\.x?html\\'" . default))))
+                          ("\\.x?html\\'" . default)))
+
+    (setq org-agenda-custom-commands
+          '(("v" "Agenda and todo's"
+             ((agenda "")
+              (org-todo-list)))))
+
+    ;; Setup BBDB
+    ;; (bbdb-handy-enable)
+
+    )
+
+
 
   ;; Helm configuration
   (with-eval-after-load 'helm
@@ -331,69 +346,93 @@ before packages are loaded. If you are unsure, you should try in setting them in
 
 
   ;; Mu4e configuration
+  (add-to-list 'load-path "/run/current-system/sw/share/emacs/site-lisp/mu4e")
   (with-eval-after-load 'mu4e
-    (setq mu4e-maildir        "~/sys/docs/mail"
-          mu4e-sent-folder    "/sent"
-          mu4e-drafts-folder  "/drafts"
-          mu4e-trash-foldler  "/trash"
-          mu4e-refile-folder  "/refile")
 
-    (setq mu4e-maildir-shortcuts
-          '( ("/inbox"    . ?i)
-            ("/sent"     . ?s)
-            ("/trash"    . ?t)
-            ("/archive"  . ?a)))
-    (setq inbox-query
-          (mapconcat 'identity
-                    '("NOT flag:list"
-                      "maildir:/inbox"
-                      "NOT from:elsevier"
-                      "NOT from:notifications@3.basecamp.com")
-                    " AND "))
-    (setq mu4e-bookmarks
-        `((,inbox-query "Important emails" ?i)
-          ("subject:TODO* AND maildir:/inbox" "Todo items" ?t)
-          ("flag:attach"  "Messages with attachment" ?a)
-          ("list:vision* OR list:cvnet*"  "visionlist" ?V)))
+    (setq mu4e-maildir        "~/docs/mail"
+          mu4e-sent-folder    "/[Gmail].Drafts"
+          mu4e-drafts-folder  "/[Gmail].Sent Mail"
+          mu4e-trash-folder   "/[Gmail].Trash")
 
-    (setq
-      user-mail-address "janssen.dhj@gmail.com"
-      user-full-name "David H.J. Janssen"
-      mu4e-compose-signature "\nDavid H.J. Janssen")
+    (setq mu4e-bookmarks '(("maildir:/INBOX AND flag:unread" "Inbox" ?i)))
 
-    (setq mu4e-get-mail-command "offlineimap")
-    (setq mu4e-update-interval 300)
-    (setq mu4e-sent-messages-behavior 'delete)
-    (setq message-kill-buffer-on-exit t)
+    (setq user-mail-address       "janssen.dhj@gmail.com"
+          user-full-name          "David H.J. Janssen"
+          mu4e-compose-signature  "\nDavid H.J. Janssen")
 
-    (setq mu4e-headers-date-format "%Y-%m-%d %H:%M:%S"
-      mu4e-headers-fields '((:date . 20)
-                    (:flags . 5)
-                    (:mailing-list . 10)
-                    (:from-or-to . 25)
-                    (:subject . nil)))
+    (setq message-send-mail-function    'smtpmail-send-it
+          smtpmail-starttls-credentials '(("smtp.gmail.com" "587" nil nil))
+          smtpmail-auth-credentials     '(("smtp.gmail.com" 587 "janssen.dhj@gmail.com" nil))
+          smtpmail-default-smtp-server  "smtp.gmail.com"
+          smtpmail-smtp-server          "smtp.gmail.com"
+          smtpmail-smtp-service         587
+          smtpmail-debug-info           t
+          starttls-use-gnutls           t)
 
-
-    (setq smtpmail-debug-info t)
-    (setq send-mail-function 'smtpmail-send-it
-      message-send-mail-function 'smtpmail-send-it
-      smtpmail-starttls-credentials '(("smtp.gmail.com" "587" nil nil))
-      smtpmail-auth-credentials (expand-file-name "~/.authinfo.gpg")
-      smtpmail-default-smtp-server "smtp.gmail.com"
-      smtpmail-smtp-server "smtp.gmail.com"
-      smtpmail-smtp-service 587
-      smtpmail-debug-info t
-      starttls-extra-arguments nil
-      starttls-gnutls-program "/usr/bin/gnutls-cli"
-      starttls-extra-arguments nil
-      starttls-use-gnutls t)
+    (setq mu4e-get-mail-command "offlineimap"
+          mu4e-update-interval 300
+          mu4e-sent-messages-behavior 'delete
+          message-kill-buffer-on-exit t)
 
     (setq org-mu4e-link-query-in-headers-mode nil)
-  )
+
+    (setq mu4e-maildirs-extension-maildir-format "  %n: %u"
+          mu4e-maildirs-extension-custom-list '("/INBOX"))
+
+    (defun my/mu4e-maildirs-formatter (item)
+      "Pretty-print a maildir"
+      (let* ((unread (or (plist-get item :unread) 0))
+             (faced  (cond
+                      ((> unread 0) 'mu4e-maildirs-extension-maildir-hl-face)
+                      (t            'mu4e-maildirs-extension-maildir-face))))
+        (format "\t%s : %s"
+                (plist-get item :name)
+                (propertize (number-to-string unread) 'face faced))))
+    (setq mu4e-maildirs-extension-propertize-func 'my/mu4e-maildirs-formatter)
+
+    (setq mu4e-headers-date-format "%Y-%m-%d %H:%M:%S"
+          mu4e-headers-fields '((:date . 20)
+                                (:flags . 5)
+                                (:mailing-list . 10)
+                                (:from-or-to . 25)
+                                (:subject . nil)))
+
+    (define-key mu4e-view-mode-map
+      [remap mu4e-headers-mark-for-refile] 'mu4e-view-mark-as-read)
+
+    )
 
   (set-face-attribute 'variable-pitch nil :family "Inconsolata for Powerline")
-  )
 
+  ;; At startup, switch to org-agenda
+  (org-agenda-list)
+  (switch-to-buffer "*Org Agenda*")
+  (spacemacs/toggle-maximize-buffer)
+
+  ;; Set up easy org-capture stuff
+  (defadvice org-capture-finalize
+      (after delete-capture-frame activate)
+    "Advise capture-finalize to close the frame"
+    (if (equal "capture" (frame-parameter nil 'name))
+        (delete-frame)))
+
+  (defadvice org-capture-destroy
+      (after delete-capture-frame activate)
+    "Advise capture-destroy to close the frame"
+    (if (equal "capture" (frame-parameter nil 'name))
+        (delete-frame)))
+
+  (use-package noflet
+    :ensure t)
+
+  (defun make-capture-frame ()
+    "Create a new frame and run org-capture"
+    (interactive)
+    (select-frame-by-name "capture")
+    (delete-other-windows)
+    (noflet ((switch-to-buffer-other-window (buf) (switch-to-buffer buf)))
+      (org-capture)))
+)
 
 
 (custom-set-variables
@@ -403,12 +442,88 @@ before packages are loaded. If you are unsure, you should try in setting them in
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
    (quote
-    ("67e998c3c23fe24ed0fb92b9de75011b92f35d3e89344157ae0d544d50a63a72" "66132890ee1f884b4f8e901f0c61c5ed078809626a547dbefbb201f900d03fd8" "3d0142352ce19c860047ad7402546944f84c270e84ae479beddbc2608268e0e5" "a40eac965142a2057269f8b2abd546b71a0e58e733c6668a62b1ad1aa7669220" "3eb2b5607b41ad8a6da75fe04d5f92a46d1b9a95a202e3f5369e2cdefb7aac5c" "fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default)))
+    ("0bec8e74ce41664f0e3ce76c0d2cc82804089df70164419af313483651b16bd1" "e654ce0507ae5b2d7feeaef2c07354206781527941e7feb178c0a94be4a98e90" "c1390663960169cd92f58aad44ba3253227d8f715c026438303c09b9fb66cdfb" "f04122bbc305a202967fa1838e20ff741455307c2ae80a26035fbf5d637e325f" "6ae174add87509daef7a844174f4f985592d70ea05c3d82377ad0a38a380ae80" "67e998c3c23fe24ed0fb92b9de75011b92f35d3e89344157ae0d544d50a63a72" "66132890ee1f884b4f8e901f0c61c5ed078809626a547dbefbb201f900d03fd8" "3d0142352ce19c860047ad7402546944f84c270e84ae479beddbc2608268e0e5" "a40eac965142a2057269f8b2abd546b71a0e58e733c6668a62b1ad1aa7669220" "3eb2b5607b41ad8a6da75fe04d5f92a46d1b9a95a202e3f5369e2cdefb7aac5c" "fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default)))
  '(evil-want-Y-yank-to-eol t)
  '(org-fontify-whole-heading-line nil)
  '(package-selected-packages
    (quote
-    (gruvbox-theme-theme zonokai-theme zenburn-theme zen-and-art-theme underwater-theme ujelly-theme twilight-theme twilight-bright-theme twilight-anti-bright-theme toxi-theme tao-theme tangotango-theme tango-plus-theme tango-2-theme sunny-day-theme sublime-themes subatomic256-theme subatomic-theme spacegray-theme soothe-theme soft-stone-theme soft-morning-theme soft-charcoal-theme smyx-theme seti-theme reverse-theme railscasts-theme purple-haze-theme professional-theme planet-theme phoenix-dark-pink-theme phoenix-dark-mono-theme organic-green-theme omtose-phellack-theme oldlace-theme occidental-theme obsidian-theme noctilux-theme naquadah-theme mustang-theme monokai-theme monochrome-theme molokai-theme moe-theme minimal-theme material-theme majapahit-theme madhat2r-theme lush-theme light-soap-theme jbeans-theme jazz-theme ir-black-theme inkpot-theme heroku-theme hemisu-theme hc-zenburn-theme gruvbox-theme gruber-darker-theme grandshell-theme gotham-theme gandalf-theme flatui-theme flatland-theme farmhouse-theme espresso-theme dracula-theme django-theme darktooth-theme autothemer darkokai-theme darkmine-theme darkburn-theme dakrone-theme cyberpunk-theme color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized clues-theme cherry-blossom-theme busybee-theme bubbleberry-theme birds-of-paradise-plus-theme badwolf-theme apropospriate-theme anti-zenburn-theme ample-zen-theme ample-theme alect-themes afternoon-theme insert-shebang fish-mode company-shell web-beautify livid-mode skewer-mode json-mode json-snatcher json-reformat js2-refactor multiple-cursors js2-mode js-doc company-tern tern coffee-mode psci purescript-mode psc-ide dash-functional nix-mode helm-nixos-options company-nixos-options nixos-options fuzzy web-mode tagedit slim-mode scss-mode sass-mode pug-mode less-css-mode helm-css-scss haml-mode emmet-mode company-web web-completion-data solarized-theme erc-yt erc-view-log erc-social-graph erc-image erc-hl-nicks yaml-mode yapfify xterm-color ws-butler window-numbering which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline smeargle shell-pop restart-emacs rainbow-delimiters pyvenv pytest pyenv-mode py-isort pip-requirements persp-mode pcre2el paradox spinner pandoc-mode ox-pandoc orgit org-projectile pcache org-present org-pomodoro org-plus-contrib org-download org-bullets open-junk-file ob-sml sml-mode neotree multi-term mu4e-maildirs-extension mu4e-alert ht alert log4e gntp move-text mmm-mode markdown-toc markdown-mode magit-gitflow macrostep lorem-ipsum live-py-mode linum-relative link-hint intero info+ indent-guide ido-vertical-mode hydra hy-mode hungry-delete htmlize hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers parent-mode highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make projectile helm-hoogle helm-gitignore request helm-flx helm-descbinds helm-company helm-c-yasnippet helm-ag haskell-snippets google-translate golden-ratio gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md flyspell-correct-helm flyspell-correct flycheck-pos-tip pos-tip flycheck-haskell flycheck pkg-info epl flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit magit magit-popup git-commit with-editor evil-lisp-state evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-cleverparens smartparens paredit evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu highlight eshell-z eshell-prompt-extras esh-help elisp-slime-nav elfeed-web simple-httpd elfeed-org org elfeed-goodies ace-jump-mode noflet powerline popwin elfeed dumb-jump diminish define-word cython-mode company-statistics company-ghci company-ghc ghc haskell-mode company-cabal company-auctex company-anaconda company column-enforce-mode cmm-mode clean-aindent-mode bind-map bind-key auto-yasnippet yasnippet auto-highlight-symbol auto-dictionary auto-compile packed auctex-latexmk auctex anaconda-mode pythonic f dash s aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core async ac-ispell auto-complete popup quelpa package-build spacemacs-theme)))
+    (gruvbox-theme-theme zonokai-theme zenburn-theme
+ zen-and-art-theme underwater-theme ujelly-theme twilight-theme
+ twilight-bright-theme twilight-anti-bright-theme toxi-theme
+ tao-theme tangotango-theme tango-plus-theme tango-2-theme
+ sunny-day-theme sublime-themes subatomic256-theme
+ subatomic-theme spacegray-theme soothe-theme soft-stone-theme
+ soft-morning-theme soft-charcoal-theme smyx-theme seti-theme
+ reverse-theme railscasts-theme purple-haze-theme
+ professional-theme planet-theme phoenix-dark-pink-theme
+ phoenix-dark-mono-theme organic-green-theme
+ omtose-phellack-theme oldlace-theme occidental-theme
+ obsidian-theme noctilux-theme naquadah-theme mustang-theme
+ monokai-theme monochrome-theme molokai-theme moe-theme
+ minimal-theme material-theme majapahit-theme madhat2r-theme
+ lush-theme light-soap-theme jbeans-theme jazz-theme
+ ir-black-theme inkpot-theme heroku-theme hemisu-theme
+ hc-zenburn-theme gruvbox-theme gruber-darker-theme
+ grandshell-theme gotham-theme gandalf-theme flatui-theme
+ flatland-theme farmhouse-theme espresso-theme dracula-theme
+ django-theme darktooth-theme autothemer darkokai-theme
+ darkmine-theme darkburn-theme dakrone-theme cyberpunk-theme
+ color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized
+ clues-theme cherry-blossom-theme busybee-theme bubbleberry-theme
+ birds-of-paradise-plus-theme badwolf-theme apropospriate-theme
+ anti-zenburn-theme ample-zen-theme ample-theme alect-themes
+ afternoon-theme insert-shebang fish-mode company-shell
+ web-beautify livid-mode skewer-mode json-mode json-snatcher
+ json-reformat js2-refactor multiple-cursors js2-mode js-doc
+ company-tern tern coffee-mode psci purescript-mode psc-ide
+ dash-functional nix-mode helm-nixos-options
+ company-nixos-options nixos-options fuzzy web-mode tagedit
+ slim-mode scss-mode sass-mode pug-mode less-css-mode
+ helm-css-scss haml-mode emmet-mode company-web
+ web-completion-data solarized-theme erc-yt erc-view-log
+ erc-social-graph erc-image erc-hl-nicks yaml-mode yapfify
+ xterm-color ws-butler window-numbering which-key
+ volatile-highlights vi-tilde-fringe uuidgen use-package toc-org
+ spaceline smeargle shell-pop restart-emacs rainbow-delimiters
+ pyvenv pytest pyenv-mode py-isort pip-requirements persp-mode
+ pcre2el paradox spinner pandoc-mode ox-pandoc orgit
+ org-projectile pcache org-present org-pomodoro org-plus-contrib
+ org-download org-bullets open-junk-file ob-sml sml-mode neotree
+ multi-term mu4e-maildirs-extension mu4e-alert ht alert log4e
+ gntp move-text mmm-mode markdown-toc markdown-mode magit-gitflow
+ macrostep lorem-ipsum live-py-mode linum-relative link-hint
+ intero info+ indent-guide ido-vertical-mode hydra hy-mode
+ hungry-delete htmlize hlint-refactor hl-todo hindent
+ highlight-parentheses highlight-numbers parent-mode
+ highlight-indentation hide-comnt help-fns+ helm-themes
+ helm-swoop helm-pydoc helm-projectile helm-mode-manager
+ helm-make projectile helm-hoogle helm-gitignore request helm-flx
+ helm-descbinds helm-company helm-c-yasnippet helm-ag
+ haskell-snippets google-translate golden-ratio gnuplot
+ gitignore-mode gitconfig-mode gitattributes-mode git-timemachine
+ git-messenger git-link gh-md flyspell-correct-helm
+ flyspell-correct flycheck-pos-tip pos-tip flycheck-haskell
+ flycheck pkg-info epl flx-ido flx fill-column-indicator
+ fancy-battery eyebrowse expand-region exec-path-from-shell
+ evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor
+ evil-surround evil-search-highlight-persist evil-numbers
+ evil-nerd-commenter evil-mc evil-matchit evil-magit magit
+ magit-popup git-commit with-editor evil-lisp-state
+ evil-indent-plus evil-iedit-state iedit evil-exchange
+ evil-escape evil-ediff evil-cleverparens smartparens paredit
+ evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu
+ highlight eshell-z eshell-prompt-extras esh-help elisp-slime-nav
+ elfeed-web simple-httpd elfeed-org org elfeed-goodies
+ ace-jump-mode noflet powerline popwin elfeed dumb-jump diminish
+ define-word cython-mode company-statistics company-ghci
+ company-ghc ghc haskell-mode company-cabal company-auctex
+ company-anaconda company column-enforce-mode cmm-mode
+ clean-aindent-mode bind-map bind-key auto-yasnippet yasnippet
+ auto-highlight-symbol auto-dictionary auto-compile packed
+ auctex-latexmk auctex anaconda-mode pythonic f dash s
+ aggressive-indent adaptive-wrap ace-window ace-link
+ ace-jump-helm-line helm avy helm-core async ac-ispell
+ auto-complete popup quelpa package-build spacemacs-theme)))
  '(psc-ide-add-import-on-completion t t)
  '(psc-ide-rebuild-on-save nil t))
 (custom-set-faces
@@ -416,7 +531,7 @@ before packages are loaded. If you are unsure, you should try in setting them in
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(default ((((class color) (min-colors 16777215)) (:background "#282828" :foreground "#fdf4c1" :family "mononoki Nerd Font" :foundry "UKWN" :slant normal :weight normal :height 119 :width normal)) (((class color) (min-colors 255)) (:background "#262626" :foreground "#ffffaf" :family "mononoki Nerd Font" :foundry "UKWN" :slant normal :weight normal :height 119 :width normal)))))
 (defun dotspacemacs/emacs-custom-settings ()
   "Emacs custom settings.
 This is an auto-generated function, do not modify its content directly, use
