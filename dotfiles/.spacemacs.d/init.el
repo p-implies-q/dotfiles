@@ -24,12 +24,14 @@
   (dotspacemacs/layers/config)
   (dotspacemacs/layers/packages))
 
+
+
 ;;; Layers
 
 (defvar dotspacemacs/layers/local
-  '((macros :location local)   ; All local layers depend on this
-    (config :location local)
-   )
+  '((macros    :location local)   ; All local layers depend on this
+    (config    :location local)
+    (my-exwm   :location local))
   "Local layers in ~/.spacemacs.d/layers")
 
 (defvar dotspacemacs/layers/core
@@ -178,7 +180,7 @@
    dotspacemacs-scratch-mode                        'org-mode
    dotspacemacs-default-layout-name                 "Default"
    dotspacemacs-display-default-layout              nil
-   dotspacemacs-auto-resume-layouts                 t
+   dotspacemacs-auto-resume-layouts                 nil
    dotspacemacs-auto-generate-layout-names          t
    dotspacemacs-switch-to-buffer-prefers-purpose    nil
    ))

@@ -1,5 +1,7 @@
 [user]
 	email = janssen.dhj@gmail.com
-	name = David Janssen
+	name  = David Janssen
 [core]
-	askpass = 
+	askpass =
+[diff]
+	tool = vimdiff

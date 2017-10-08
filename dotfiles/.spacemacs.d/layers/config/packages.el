@@ -19,7 +19,7 @@
     ;; Large sections
     (my-org  :location local)
     (my-mu4e :location local)
-    (my-exwm :location local)
+    ;; (my-exwm :location local)
     ))
 
 ;;; Core
@@ -44,7 +44,7 @@
 (defun config/post-init-avy ()
   (setq avy-timeout-seconds 0.35)
   (evil-global-set-key 'normal (kbd "s") 'avy-goto-char-timer)
-  (global-set-key (kbd "C-h") 'avy-pop-mark)
+  ;; (global-set-key (kbd "C-h") 'avy-pop-mark)
   (global-set-key (kbd "C-l") 'evil-avy-goto-line))
 
 ;;;; Outshine
@@ -71,12 +71,15 @@
 
 ;;;; Neotree
 
+(defun config/init-all-the-icons ()
+  (use-package all-the-icons))
+
 (defun config/pre-init-neotree ()
   (evil-global-set-key 'normal (kbd "M-f") 'winum-select-window-0)
   (evil-global-set-key 'normal (kbd "M-p") 'neotree-find-project-root))
 
 (defun config/post-init-neotree ()
-  ;; (setq neo-theme 'icons)
+  (setq neo-theme 'icons)
   (setq neo-window-width 28)
   (setq neo-hidden-regexp-list '("^\\." "^#.*#$" "\\.elc$")))
 
@@ -108,5 +111,5 @@
   (use-package my-mu4e
     :after mu4e))
 
-(defun config/init-my-exwm ()
-  (use-package my-exwm))
+;; (defun config/init-my-exwm ()
+;;   (use-package my-exwm))
