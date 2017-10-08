@@ -3,3 +3,4 @@
 *xmonad.state
 /dotfiles/.xmonad/xmonad.errors
 /dotfiles/.ghc/ghci_history
+/dotfile/.spacemacs.d/custom.el

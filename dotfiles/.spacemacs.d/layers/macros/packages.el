@@ -1,9 +1,18 @@
 ;;; Macros Layer
 
-(setq macros-packages
+(defconst macros-packages
       '(
+        dash
         dash-functional
         ))
 
+(defun macros/init-dash ()
+  (use-package dash))
+
+(defun macros/post-init-dash ()
+  (dash-enable-font-lock))
+
+
 (defun macros/init-dash-functional ()
+  (message "ping")
   (use-package dash-functional))
