@@ -1,27 +1,61 @@
 
 ;;; Brightness controls
+
+(defun quiet-command (cmd)
+  (start-process-shell-command cmd nil cmd))
+
 (defun inc-brightness ()
   (interactive)
-  (shell-command "xbacklight -inc 10"))
+  (quiet-command "xbacklight -inc 10"))
 
 (defun dec-brightness ()
   (interactive)
-  (shell-command "xbacklight -dec 10"))
+  (quiet-command "xbacklight -dec 10"))
 
-;;; Starting external processes
-(defun run-external (cmd)
+(defun inc-volume ()
+  (interactive)
+  (quiet-command "pulsevolume plus"))
+
+(defun dec-volume ()
+  (interactive)
+  (quiet-command "pulsevolume minus"))
+
+(defun toggle-mute ()
+  (interactive)
+  (quiet-command "pulsevolume mute"))
+
+;;; Starting external command
+
+(defvar my-exwm/common-commands
+  '("setxkbmap us -variant colemak -option ctrl:nocaps"
+    "setxkbmap us"
+    "sudo pkill lightdm"
+    "sudo nixos-rebuild switch")
+  "Commands that are often run from the command-line")
+
+(defun run-command (cmd)
   "Run external shell command using helm-completion"
-  (interactive (list (helm-comp-read "$: " common-commands)))
+  (interactive (list (helm-comp-read "$: " my-exwm/common-commands)))
   (shell-command cmd))
 
+(defvar my-exwm/common-programs
+  '("chromium")
+  "Programs that I launch often"
+  )
+;;; Start a program
+(defun run-program (cmd)
+  "Start a program"
+  (interactive (list (helm-comp-read "$: " my-exwm/common-programs)))
+  (start-process-shell-command cmd nil cmd))
+
+
 ;;; Adding a global key
-(defun exwm-global-set-keys (&rest BINDINGS)
-  "Add exwm keys, add them to global-keys explicitly"
+(defun exwm-global-set-keys (BINDINGS)
+  "Set up keybindings for exwm"
   (-each (-partition 2 BINDINGS)
         (-lambda ((key cmd))
           (progn
-            (exwm-input-set-key (kbd key) cmd)
-            (push (kbd key) exwm-input--global-keys)))))
+            (exwm-input-set-key (kbd key) cmd)))))
 
 ;;; Start exwm
 (defun start-exwm ()

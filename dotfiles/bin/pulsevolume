@@ -13,7 +13,7 @@ SINK_NAME=$(pacmd dump | perl -a -n -e 'print $F[1] if /set-default-sink/')
 # set max allowed volume; 0x10000 = 100%
 VOL_MAX="0x50000"
 
-STEPS="128" # 2^n
+STEPS="64" # 2^n
 VOL_STEP=$((VOL_MAX / STEPS))
 
 VOL_NOW=`pacmd dump | grep -P "^set-sink-volume $SINK_NAME\s+" | perl -p -n -e 's/.+\s(.x.+)$/$1/'`

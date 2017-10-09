@@ -12,7 +12,5 @@
 (defun macros/post-init-dash ()
   (dash-enable-font-lock))
 
-
 (defun macros/init-dash-functional ()
-  (message "ping")
   (use-package dash-functional))

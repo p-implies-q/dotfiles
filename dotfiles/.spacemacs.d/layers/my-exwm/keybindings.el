@@ -1,17 +1,17 @@
 
 ;;; Push "s-m" to global input key
-(push dotspacemacs-emacs-leader-key exwm-input--global-keys)
+(push (kbd dotspacemacs-emacs-leader-key) exwm-input--global-keys)
 
 ;;; Set the global exwm-control keys
 (exwm-global-set-keys
  '(
     "C-c i"  exwm-input-toggle-keyboard
-    "s-a"    run-external
+    "s-a"    run-command
     "s-d"    (lambda () (interactive) (kill-buffer nil))
     "s-;"    evil-ex
     "s-:"    helm-M-x
     "s-n"    helm-mini
-    "s-t"    run-external
+    "s-t"    run-program
 
     ;; Focusing, moving, and resizing
     "s-h"    evil-window-left
@@ -30,11 +30,11 @@
     "C-s-l"  spacemacs/enlarge-window-horizontally
 
     ;; Multimedia keys
-    "<XF86AudioRaiseVolume>"  pulseaudio-control-increase-volume
-    "<XF86AudioLowerVolume>"  pulseaudio-control-decrease-volume
-    "<XF86AudioMute>"         pulseaudio-contorl-toggle-current-sink-mute
+    "<XF86AudioRaiseVolume>"  inc-volume
+    "<XF86AudioLowerVolume>"  dec-volume
+    "<XF86AudioMute>"         toggle-mute
     "<XF86MonBrightnessUp>"   inc-brightness
-    "<XF86MonBrightnessDown>" inc-brightness
+    "<XF86MonBrightnessDown>" dec-brightness
     ))
 
 
