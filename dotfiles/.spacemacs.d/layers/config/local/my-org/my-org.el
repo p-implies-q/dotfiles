@@ -57,8 +57,8 @@
                "* TODO %? %^g\n" :kill-buffer)
               ("T" "todo-here" entry (file+headline "~/org/plan.org" "Todos")
                "* TODO %? %^g\n%a\n" :kill-buffer)
-              ("a" "appt" entry (file+datetree+prompt "~/org/appts.org")
-               "* TODO %? %^g\n%T" :kill-buffer)
+              ("a" "appt" entry (file+headline "~/org/appts.org" "Appointments")
+               "* TODO %? %^g\nSCHEDULED: %^T" :kill-buffer)
               ("n" "note" entry (file "~/org/refile.org")
                "* %? :NOTE:\n%U\n%a\n" :kill-buffer)
               ("j" "journal" entry (file+datetree "~/org/journal.org")
@@ -87,6 +87,18 @@
                       ("\\.x?html\\'" . default)))
 
 (setq org-agenda-custom-commands
-      '(("v" "Agenda and todo's"
+      '(("v" "Overview"
          ((agenda "")
-          (org-todo-list)))))
+          (tags-todo "today")
+          (tags-todo "-today/-WAITING")
+          (tags-todo "WAITING")))
+
+        ("w" "Office"
+         ((agenda "")
+          (tags-todo "admin")
+          (tags-todo "org-admin")
+          ))
+
+        ("z" "Monastic"
+         ((tags-todo "home|build|bud")))
+        ))

@@ -2,7 +2,6 @@
 
 (provide 'my-mu4e)
 
-
 (setq mu4e-maildir        "~/docs/mail"
       mu4e-sent-folder    "/[Gmail].Drafts"
       mu4e-drafts-folder  "/[Gmail].Sent Mail"

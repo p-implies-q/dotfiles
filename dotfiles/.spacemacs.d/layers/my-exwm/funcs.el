@@ -1,5 +1,4 @@
-
-;;; Brightness controls
+;; Brightness controls
 
 (defun quiet-command (cmd)
   (start-process-shell-command cmd nil cmd))
@@ -10,7 +9,7 @@
 
 (defun dec-brightness ()
   (interactive)
-  (quiet-command "xbacklight -dec 10"))
+  (quiet-command "xbacklight -dec 5"))
 
 (defun inc-volume ()
   (interactive)
@@ -26,7 +25,7 @@
 
 ;;; Starting external command
 
-(defvar my-exwm/common-commands
+(defvar my-exwm-common-commands
   '("setxkbmap us -variant colemak -option ctrl:nocaps"
     "setxkbmap us"
     "sudo pkill lightdm"
@@ -35,17 +34,25 @@
 
 (defun run-command (cmd)
   "Run external shell command using helm-completion"
-  (interactive (list (helm-comp-read "$: " my-exwm/common-commands)))
+  (interactive (list (helm-comp-read "$: " my-exwm-common-commands)))
+  (push cmd my-exwm-common-commands)
   (shell-command cmd))
 
-(defvar my-exwm/common-programs
-  '("chromium")
+(defvar my-exwm-common-programs
+  '("chromium"
+    "chromium https://www.reddit.com"
+    "chromium https://www.youtube.com"
+    "obs"
+    "vlc"
+    "fontmatrix"
+    "pavucontrol")
   "Programs that I launch often"
   )
 ;;; Start a program
 (defun run-program (cmd)
   "Start a program"
-  (interactive (list (helm-comp-read "$: " my-exwm/common-programs)))
+  (interactive (list (helm-comp-read "$: " my-exwm-common-programs)))
+  (push cmd my-exwm-common-programs)
   (start-process-shell-command cmd nil cmd))
 
 
@@ -60,8 +67,9 @@
 ;;; Start exwm
 (defun start-exwm ()
   (interactive)
-  (shell-command "setxkbmap us -variant colemak -option ctrl:nocaps")
   (spacemacs/toggle-mode-line)
   (exwm-enable)
   (switch-to-buffer "*spacemacs*")
+  (quiet-command "setxkbmap us -variant colemak -option ctrl:nocaps")
+  (quiet-command "xcape")
   )

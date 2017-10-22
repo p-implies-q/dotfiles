@@ -5,37 +5,45 @@
 ;;; Set the global exwm-control keys
 (exwm-global-set-keys
  '(
-    "C-c i"  exwm-input-toggle-keyboard
-    "s-a"    run-command
-    "s-d"    (lambda () (interactive) (kill-buffer nil))
-    "s-;"    evil-ex
-    "s-:"    helm-M-x
-    "s-n"    helm-mini
-    "s-t"    run-program
+   ;; Buffer navigation
+   "s-a"    spacemacs/helm-buffers-smart-do-search
+   "s-r"    helm-filtered-bookmarks
+   "s-s"    helm-find-files
+   "s-t"    helm-mini
+   "s-d"    (lambda () (interactive) (kill-buffer nil))
 
-    ;; Focusing, moving, and resizing
-    "s-h"    evil-window-left
-    "s-j"    evil-window-down
-    "s-k"    evil-window-up
-    "s-l"    evil-window-right
+   ;; Launch things
+   "s-O"    evil-ex
+   "s-o"    helm-M-x
+   "s-u"    run-program
+   "s-y"    run-command
+   "C-c i"  exwm-input-toggle-keyboard
 
-    "s-H"    evil-window-move-far-left
-    "s-J"    evil-window-move-very-bottom
-    "s-K"    evil-window-move-very-top
-    "s-L"    evil-window-move-far-right
+   ;; Focusing, moving, and resizing
+   "s-h"    evil-window-left
+   "s-j"    evil-window-down
+   "s-k"    evil-window-up
+   "s-l"    evil-window-right
 
-    "C-s-h"  spacemacs/shrink-window-horizontally
-    "C-s-j"  spacemacs/shrink-window
-    "C-s-k"  spacemacs/enlarge-window
-    "C-s-l"  spacemacs/enlarge-window-horizontally
+   "s-H"    evil-window-move-far-left
+   "s-J"    evil-window-move-very-bottom
+   "s-K"    evil-window-move-very-top
+   "s-L"    evil-window-move-far-right
 
-    ;; Multimedia keys
-    "<XF86AudioRaiseVolume>"  inc-volume
-    "<XF86AudioLowerVolume>"  dec-volume
-    "<XF86AudioMute>"         toggle-mute
-    "<XF86MonBrightnessUp>"   inc-brightness
-    "<XF86MonBrightnessDown>" dec-brightness
-    ))
+   "C-s-h"  (lambda () (interactive) (spacemacs/shrink-window-horizontally 3))
+   "s-f"    (lambda () (interactive) (spacemacs/shrink-window-horizontally 3))
+   "C-s-j"  spacemacs/shrink-window
+   "C-s-k"  spacemacs/enlarge-window
+   "C-s-l"  (lambda () (interactive) (spacemacs/enlarge-window-horizontally 3))
+   "s-p"    (lambda () (interactive) (spacemacs/enlarge-window-horizontally 3))
+
+   ;; Multimedia keys
+   "<XF86AudioRaiseVolume>"  inc-volume
+   "<XF86AudioLowerVolume>"  dec-volume
+   "<XF86AudioMute>"         toggle-mute
+   "<XF86MonBrightnessUp>"   inc-brightness
+   "<XF86MonBrightnessDown>" dec-brightness
+   ))
 
 
 ;;; Set some workspace keys

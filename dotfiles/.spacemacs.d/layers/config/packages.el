@@ -2,7 +2,9 @@
   '(
 
     ;; Core
+    dired
     evil
+    helm
 
     ;; Navigation
     avy
@@ -11,14 +13,16 @@
     projectile
 
     ;; Misc
+    emms
     all-the-icons
     ispell
     mu4e
     yasnippet
 
     ;; Large sections
-    (my-org  :location local)
-    (my-mu4e :location local)
+    (my-org    :location local)
+    (my-mu4e   :location local)
+    (my-eshell :location local)
     ))
 
 ;;; Core
@@ -87,6 +91,15 @@
 (defun config/pre-init-dired ()
   (setq dired-listing-switches "-lhgoBF --group-directories-first"))
 
+(defun config/init-dired ()
+  (use-package dired))
+
+(defun config/post-init-dired ()
+  (add-hook 'dired-after-readin-hook 'dired-dotfiles-toggle)
+  (define-key dired-mode-map (kbd "C-s") 'dired-dotfiles-toggle)
+  )
+
+
 ;;;; Projectile
 
 (defun config/post-init-projectile ()
@@ -96,19 +109,35 @@
 ;;;; Ispell
 (defun config/post-init-ispell ()
   (setq ispell-program-name "aspell"))
+;;;; EMMS
+(defun config/init-emms ()
+  (use-package emms
+    :ensure t :defer t
+    :config
+    (progn
+      (require 'emms-setup)
+      (emms-all)
+      (emms-default-players)
+      (require 'emms-player-simple)
+      (require 'emms-source-file)
+      (require 'emms-source-playlist)
+      (require 'emms-player-vlc)
+      (setq emms-player-list '(emms-player-vlc)
+            emms-source-file-default-directory "~/docs/audio/music")
+      )))
 
 ;;; Local packages
+
 (defun config/init-my-org ()
   (use-package my-org
     :after org))
 
-(defun config/init-mu4e ()
-  (use-package mu4e
-    :load-path "/run/current-system/sw/share/emacs/site-lisp/mu4e"))
+(defun config/pre-init-mu4e ()
+  (add-to-list 'load-path "/run/current-system/sw/share/emacs/site-lisp/mu4e"))
 
 (defun config/init-my-mu4e ()
   (use-package my-mu4e
     :after mu4e))
 
-;; (defun config/init-my-exwm ()
-;;   (use-package my-exwm))
+(defun config/init-my-eshell ()
+  (use-package my-eshell))

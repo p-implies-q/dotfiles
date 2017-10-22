@@ -30,13 +30,15 @@
 
 (defvar dotspacemacs/layers/local
   '((macros    :location local)   ; All local layers depend on this
-    (config    :location local)
-    (my-exwm   :location local))
+    (my-exwm   :location local)   ; Should be run before config
+    (langs     :location local)
+    (config    :location local))
   "Local layers in ~/.spacemacs.d/layers")
 
 (defvar dotspacemacs/layers/core
   '(better-defaults
     git
+    helm
     syntax-checking
     (auto-completion
         :variables
@@ -58,7 +60,8 @@
   "Core Spacemacs configuration layers")
 
 (defvar dotspacemacs/layers/langs
-  '(emacs-lisp
+  '(common-lisp
+    emacs-lisp
     html
     javascript
     latex
@@ -67,25 +70,28 @@
     purescript
     nixos
     (haskell
-        :variables
-        haskell-completion-backend 'intero
-        haskell-enable-ghc-mod-support nil
-        haskell-process-type           'stack-ghci)
+     :variables
+     haskell-completion-backend 'intero
+     haskell-enable-ghc-mod-support nil
+     haskell-process-type           'stack-ghci)
     (python
-        :variables
-        python-sort-imports-on-save t
-        python-test-runner 'pytest))
+     :variables
+     python-sort-imports-on-save t
+     python-test-runner 'pytest))
   "Language specific layers")
 
 (defvar dotspacemacs/layers/extra
-  '(ranger
+  '(pdf-tools
+    ranger
     search-engine
     (mu4e
-        :variables
-        mu4e-installation-path "/run/current-system/sw/share/emacs/site-lisp")
+     :variables
+     mu4e-installation-path "/run/current-system/sw/share/emacs/site-lisp")
     (syntax-checking
-        :variables
-        syntax-checking-enable-by-default t)
+     :variables
+     syntax-checking-enable-by-default t)
+    (transmission :variables transmission-auto-refresh-all t)
+
     )
   "Miscellaneous layers")
 
@@ -128,9 +134,8 @@
 (defun dotspacemacs/init/display ()
   (setq-default
    dotspacemacs-themes                     '(
-                                             ;; spacemacs-dark
-                                             material
-                                             material-light
+                                             base16-tomorrow-night
+                                             dracula
                                              base16-ocean
                                              leuven
                                              )

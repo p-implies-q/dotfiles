@@ -1,15 +1,21 @@
 (defconst my-exwm-packages
   '(
+    ;; EPA
+    epa
 
     ;; Core
     exwm
-    (exwm-config :after exwm)
-    (exwm-randr  :after exwm)
 
     ;; OS controls
     pulseaudio-control
 
     ))
+
+(defun my-exwm/init-epa ()
+  (use-package epa))
+
+(defun my-exwm/post-init-epa ()
+  (setq epa-pinentry-mode 'loopback))
 
 ;;; Core
 ;;;; exwm
@@ -41,12 +47,8 @@
   ;; Use a temporary mini-buffer positioned in the bottom
   (setq exwm-workspace-minibuffer-position 'bottom)
 
-  )
-
-;;;; exwm-randr
-(defun my-exwm/post-init-exwm-randr ()
-
   ;; Enable xrandr for exwm
+  (require 'exwm-randr)
   (setq exwm-randr-workspace-output-plist '(0 "VGA1"))
   (exwm-randr-enable)
 
@@ -55,12 +57,10 @@
             (lambda ()
               (start-process-shell-command
                "xrandr" nil "xrandr --output VGA1 --left-of LVDS1 --auto")))
+
   )
 
-;;;; exwm-config
-(defun my-exwm/post-init-exwm-config ()
-  ;; TODO figure out what this does
-  (exwm-config-misc))
+
 
 
 (defun my-exwm/post-init-pulseaudio-control

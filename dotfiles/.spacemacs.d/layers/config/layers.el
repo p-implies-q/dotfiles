@@ -6,5 +6,5 @@
 
    ;; Personal layers
    macros
-
+   ;; my-exwm
    ))
