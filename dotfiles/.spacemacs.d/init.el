@@ -30,7 +30,6 @@
 
 (defvar dotspacemacs/layers/local
   '((macros    :location local)   ; All local layers depend on this
-    (my-exwm   :location local)   ; Should be run before config
     (langs     :location local)
     (config    :location local))
   "Local layers in ~/.spacemacs.d/layers")
@@ -49,9 +48,6 @@
     (org
         :variables
         org-want-todo-bindings t)
-    (shell
-        :variables
-        shell-default-shell 'eshell)
     (version-control
         :variables
         version-control-global-margin t

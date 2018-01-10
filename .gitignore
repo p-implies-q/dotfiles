@@ -5,3 +5,6 @@
 /dotfiles/.ghc/ghci_history
 /dotfile/.spacemacs.d/custom.el
 /dotfiles/.spacemacs.d/custom.el
+/dotfiles/.xmonad/xmonad.hi
+/dotfiles/.config/htop/htoprc
+/dotfiles/.config/fish/fishd.herbert

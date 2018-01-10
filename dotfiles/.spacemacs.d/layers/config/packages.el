@@ -22,7 +22,6 @@
     ;; Large sections
     (my-org    :location local)
     (my-mu4e   :location local)
-    (my-eshell :location local)
     ))
 
 ;;; Core

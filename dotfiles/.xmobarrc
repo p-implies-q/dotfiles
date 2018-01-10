@@ -11,7 +11,7 @@ Config {
    -- layout
    , sepChar =  "%"   -- delineator between plugin names and straight text
    , alignSep = "}{"  -- separator between left-right alignment
-   , template = "%StdinReader% }{ %battery% | %date% "
+   , template = "%StdinReader% } %pomodoro% { %battery% | %date% "
 
    -- general behavior
    , lowerOnStart =     True    -- send to bottom of window stack on start
@@ -60,5 +60,7 @@ Config {
         , Run Date           "<fc=#ABABAB>%m-%d %H%M</fc>" "date" 10
 
         , Run StdinReader
+
+        , Run CommandReader "~/opt/pymodoro/pymodoro.py --auto-hide" "pomodoro"
         ]
    }
