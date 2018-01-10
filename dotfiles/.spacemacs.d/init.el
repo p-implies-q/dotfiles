@@ -73,7 +73,9 @@
     (python
      :variables
      python-sort-imports-on-save t
-     python-test-runner 'pytest))
+     python-test-runner 'pytest)
+    yaml
+    )
   "Language specific layers")
 
 (defvar dotspacemacs/layers/extra
@@ -86,7 +88,6 @@
     (syntax-checking
      :variables
      syntax-checking-enable-by-default t)
-    (transmission :variables transmission-auto-refresh-all t)
 
     )
   "Miscellaneous layers")

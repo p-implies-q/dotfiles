@@ -1,6 +1,16 @@
-#!/bin/sh
+#!/usr/bin/env python
 
-FILE=$HOME/docs/audio/effects/bell.wav
+from __future__ import print_function
 
-TIME=`echo "$1 * 60" | bc -l`
-aplay $FILE && sleep $TIME && aplay $FILE
+import sys
+import time
+import subprocess
+
+CMD = ["aplay", "/home/david/docs/audio/effects/bell.wav", "-q"]
+TIME = int(sys.argv[1])
+subprocess.Popen(CMD)
+for m in range(TIME, 0, -1):
+    sys.stdout.write("Bell will sound again in {0} minutes\r".format(m))
+    sys.stdout.flush()
+    time.sleep(60)
+subprocess.Popen(CMD)
