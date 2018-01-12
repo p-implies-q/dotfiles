@@ -31,12 +31,6 @@
   (setq evil-escape-key-sequence           "fp"
         evil-escape-unordered-key-sequence "true")
 
-  (evil-global-set-keys
-   '(normal visual motion)
-   "H" 'evil-first-non-blank
-   "L" (lambda () (interactive) (evil-end-of-line))
-   "0" 'evil-jump-item)
-
   (advice-add 'evil-ex-search-next     :after 'config/scroll-to-center-advice)
   (advice-add 'evil-ex-search-previous :after 'config/scroll-to-center-advice))
 

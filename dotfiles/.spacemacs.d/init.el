@@ -29,9 +29,11 @@
 ;;; Layers
 
 (defvar dotspacemacs/layers/local
-  '((macros    :location local)   ; All local layers depend on this
-    (langs     :location local)
-    (config    :location local))
+  '(
+  ;; '((macros    :location local)   ; All local layers depend on this
+    ;; (langs     :location local)
+    (config    :location local)
+    )
   "Local layers in ~/.spacemacs.d/layers")
 
 (defvar dotspacemacs/layers/core
@@ -62,7 +64,6 @@
     javascript
     latex
     markdown
-    pandoc
     purescript
     nixos
     (haskell
@@ -107,7 +108,9 @@
 
 (defun dotspacemacs/layers/packages ()
   (setq-default
-   dotspacemacs-additional-packages     '(exwm)
+   dotspacemacs-additional-packages     '(exwm
+                                          jinja2-mode
+                                          )
    dotspacemacs-delete-orphan-packages  t
    dotspacemacs-excluded-packages       '(exec-path-from-shell)
    dotspacemacs-frozen-packages         '()
@@ -131,9 +134,7 @@
 (defun dotspacemacs/init/display ()
   (setq-default
    dotspacemacs-themes                     '(
-                                             base16-tomorrow-night
-                                             dracula
-                                             base16-ocean
+                                             spacemacs-dark
                                              leuven
                                              )
    dotspacemacs-default-font               '("Mononoki Nerd Font"
@@ -204,7 +205,7 @@
    dotspacemacs-default-package-repository  nil
    dotspacemacs-elpa-https                  t
    dotspacemacs-elpa-timout                 5
-   dotspacemacs-check-for-update            nil
+   dotspacemacs-check-for-update            t
    dotspacemacs-elpa-subdirectory           nil
    ))
 

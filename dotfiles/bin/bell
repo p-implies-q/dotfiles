@@ -2,15 +2,46 @@
 
 from __future__ import print_function
 
+from datetime import datetime
+
+import signal
+import subprocess
 import sys
 import time
-import subprocess
 
-CMD = ["aplay", "/home/david/docs/audio/effects/bell.wav", "-q"]
-TIME = int(sys.argv[1])
-subprocess.Popen(CMD)
-for m in range(TIME, 0, -1):
-    sys.stdout.write("Bell will sound again in {0} minutes\r".format(m))
-    sys.stdout.flush()
-    time.sleep(60)
-subprocess.Popen(CMD)
+LOGFILE = "/home/david/opt/dotfiles/meditation.log"
+SOUND_EFFECT ="/home/david/docs/audio/effects/bell.wav"
+
+
+def ring_bell():
+    subprocess.Popen(["aplay", SOUND_EFFECT, "-q"])
+
+
+def log(start, end):
+    with open(LOGFILE, "a") as f:
+        f.write(start.strftime("From %y-%m-%d %H:%M:%S ") +
+                end.strftime("till %y-%m-%d %H:%M:%S\n"))
+
+
+def main(duration=None):
+    if duration is None:
+        duration = 99999999
+    signal.signal(signal.SIGINT, signal.default_int_handler)
+    start_time = datetime.now()
+    try:
+        ring_bell()
+        for m in xrange(duration, 0, -1):
+            sys.stdout.write("Bell will sound again in {0} minutes\r".format(m))
+            sys.stdout.flush()
+            time.sleep(60)
+        ring_bell()
+    except KeyboardInterrupt:
+        pass
+    log(start_time, datetime.now())
+
+
+if __name__ == "__main__":
+    if len(sys.argv) > 1:
+        main(int(sys.argv[1]))
+    else:
+        main()

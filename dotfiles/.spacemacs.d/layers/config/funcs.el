@@ -16,10 +16,3 @@
           (dired-do-kill-lines))
       (progn (revert-buffer)
              (set (make-local-variable 'dired-dotfiles-show-p) t)))))
-
-(defun evil-global-set-keys (STATES &rest BINDINGS)
-  "'Evil-global-set-key' for all STATES with many BINDINGS."
-  (--each STATES
-	  (-each (-partition 2 BINDINGS)
-      (-lambda ((key cmd))
-			  (evil-global-set-key it key cmd)))))
