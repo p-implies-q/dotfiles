@@ -8,3 +8,5 @@
 /dotfiles/.xmonad/xmonad.hi
 /dotfiles/.config/htop/htoprc
 /dotfiles/.config/fish/fishd.herbert
+/dotfiles/.ghc
+/dotfiles/.stack
