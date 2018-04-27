@@ -28,8 +28,7 @@
 ;;;; Evil
 
 (defun config/post-init-evil ()
-  (setq evil-escape-key-sequence           "fp"
-        evil-escape-unordered-key-sequence "true")
+  (setq evil-escape-unordered-key-sequence "true")
 
   (advice-add 'evil-ex-search-next     :after 'config/scroll-to-center-advice)
   (advice-add 'evil-ex-search-previous :after 'config/scroll-to-center-advice))

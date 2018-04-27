@@ -8,7 +8,6 @@
 
 (defun dotspacemacs/init ()
   "Spacemacs core settings."
-  (message "hello")
   (dotspacemacs/init/coding)
   (dotspacemacs/init/display)
   (dotspacemacs/init/evil)
@@ -17,6 +16,7 @@
   (dotspacemacs/init/misc)
   (dotspacemacs/init/packages)
   (dotspacemacs/init/startup)
+  (package-initialize)
   )
 
 (defun dotspacemacs/layers ()
@@ -68,9 +68,11 @@
     nixos
     (haskell
      :variables
-     haskell-completion-backend 'intero
+     haskell-completion-backend     'ghci
      haskell-enable-ghc-mod-support nil
-     haskell-process-type           'stack-ghci)
+     haskell-process-type           'cabal-repl
+     haskell-process-args-cabal-repl '("--ghc-options=-ferror-spans -fshow-loaded-modules")
+     )
     (python
      :variables
      python-sort-imports-on-save t
@@ -100,10 +102,12 @@
    dotspacemacs-ask-for-lazy-installation  t
 
    dotspacemacs-configuration-layer-path   `(,(os-path "~/.spacemacs.d/layers"))
-   dotspacemacs-configuration-layers       (append dotspacemacs/layers/core
+   dotspacemacs-configuration-layers       (
+                                            append dotspacemacs/layers/core
                                                    dotspacemacs/layers/langs
                                                    dotspacemacs/layers/extra
-                                                   dotspacemacs/layers/local)
+                                                   dotspacemacs/layers/local
+                                                   )
    ))
 
 (defun dotspacemacs/layers/packages ()

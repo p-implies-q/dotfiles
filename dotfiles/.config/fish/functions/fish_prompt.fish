@@ -1,0 +1,1 @@
+/home/david/.config/fish/omf/themes/agnoster/fish_prompt.fish
