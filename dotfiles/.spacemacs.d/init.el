@@ -24,8 +24,7 @@
    dotspacemacs-whitespace-cleanup        'trailing
 
    ;; Appearance settings
-   dotspacemacs-themes                     '(darktooth
-                                             spacemacs-dark
+   dotspacemacs-themes                     '(spacemacs-dark
                                              leuven)
    dotspacemacs-default-font               '("Mononoki Nerd Font"
                                              :size 16
