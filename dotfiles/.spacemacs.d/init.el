@@ -1,4 +1,4 @@
-;;; Dotspacemacs
+;;;; Dotspacemacs
 
 ;; -- David Janssen's Spacemacs Configuration --
 ;; -- Contact: janssen.dhj@gmail.com
@@ -91,7 +91,7 @@
    dotspacemacs-default-package-repository  nil
    dotspacemacs-elpa-https                  t
    dotspacemacs-elpa-timout                 5
-   dotspacemacs-check-for-update            t
+   dotspacemacs-check-for-update            nil ;; Untill internet is back and trustworthy
    dotspacemacs-elpa-subdirectory           nil
 
    ;; Startup settings
@@ -135,17 +135,63 @@
      html
      javascript
      markdown
-     nixos
 
      (haskell
       :variables
-      haskell-completion-backend     'ghci
+      haskell-completion-backend     'intero
       haskell-enable-ghc-mod-support nil
       haskell-process-type           'cabal-repl
       haskell-process-args-cabal-repl '("--ghc-options=-ferror-spans -fshow-loaded-modules"))
+     (mu4e
+      :variables
+      mu4e-installation-path "/usr/share/emacs/site-lisp")
      (python
       :variables
       python-sort-imports-on-save t
       python-test-runner 'pytest)
 
+     (purescript)
      )))
+
+(defun dotspacemacs/user-config ()
+
+  (defadvice load-theme (before theme-dont-propagate activate)
+    (mapcar #'disable-theme custom-enabled-themes))
+
+  (setq mu4e-maildir       "~/docs/mail"
+        mu4e-drafts-folder "/[Gmail].Drafts"
+        mu4e-sent-folder   "/[Gmail].Sent Mail"
+        mu4e-trash-folder  "/[Gmail].Trash")
+
+  (setq mu4e-sent-messages-behavior 'delete)
+  (setq mu4e-maildir-shortcuts
+        '( ("/INBOX"              . ?i)
+           ("/[Gmail].Sent Mail"  . ?s)
+           ("/[Gmail].All Mail"   . ?a)))
+
+  (require 'smtpmail)
+  (setq message-send-mail-function 'smtpmail-send-it
+        starttls-use-gnutls t
+        smtpmail-starttls-credentials '(("smtp.gmail.com" 587 nil nil))
+        smtpmail-auth-credentials '(("smtp.gmail.com" 587 "janssen.dhj@gmail.com" nil))
+        smtpmail-default-smtp-server "smtp.gmail.com"
+        smtpmail-smtp-server "smtp.gmail.com"
+        smtpmail-smtp-service 587)
+
+  (setq message-kill-buffer-on-exit t)
+
+  (setq
+   user-mail-address "janssen.dhj@gmail.com"
+   user-full-name     "David Janssen")
+
+  (define-key evil-motion-state-map "!" nil)
+  (load-theme 'darktooth t)
+
+  ;; Configure org
+  (add-hook 'org-mode-hook
+    (lambda ()
+      (org-indent-mode    t)
+      (auto-fill-mode     t)
+      ))
+
+  )

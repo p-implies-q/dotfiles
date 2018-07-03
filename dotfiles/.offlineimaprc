@@ -8,7 +8,8 @@ pythonfile = ~/.offlineimap.py
 localrepository = Local
 remoterepository = Remote
 maxage = 1000
-postsynchook = mu index --maildir ~/docs/mail
+autorefresh = 1
+#postsynchook = mu index --maildir ~/docs/mail
 
 [Repository Local]
 type = Maildir

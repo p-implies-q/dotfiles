@@ -1,0 +1,3 @@
+#!/bin/sh
+
+python ~/opt/pymodoro/pymodoro.py

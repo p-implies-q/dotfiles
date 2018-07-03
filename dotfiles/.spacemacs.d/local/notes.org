@@ -1,0 +1,6 @@
+* Load order in a layer
+1. layers.el         - declare additional layers
+2. packages.el       - list and configure included packages
+3. funcs.el          - put all user-defined functions here
+4. config.el         - layer specific configuration
+5. keybindings.el    - specify key bindings

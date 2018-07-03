@@ -140,51 +140,61 @@ captureCmd = "emacsclient -nc -F " ++ traits ++ " --eval " ++ cmd ++ " &>/tmp/er
     cmd    = show $ "(make-capture-frame)"
 
 -- Hopefully all this will soon be replaced with hydras
-myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
-    [
-      ((modm,               xK_space ), unGrab >> spawn "scylla run main")
-    , ((modm,               xK_Tab   ), unGrab >> spawn "scylla run main")
-    , ((modm,               xK_a     ), unGrab >> spawn "scylla run main")
-    , ((modm,               xK_s     ), spawn "termite")
-    -- , ((modm,               xK_Tab   ), spawn "password-store")
-    -- , ((modm .|. shiftMask, xK_Tab   ), spawn "password-store --type")
-    , ((modm,            xK_semicolon), spawn captureCmd)
-    , ((modm,               xK_d     ), kill)
-    , ((modm,               xK_q     ), sendMessage Shrink)
-    , ((modm,               xK_w     ), sendMessage Expand)
-    , ((modm,               xK_f     ), windows W.focusUp)
-    , ((modm,               xK_p     ), windows W.focusDown)
-    , ((modm,               xK_g     ), windows W.focusMaster)
-    , ((modm .|. shiftMask, xK_q     ), sendMessage MirrorExpand)
-    , ((modm .|. shiftMask, xK_w     ), sendMessage MirrorShrink)
-    , ((modm .|. shiftMask, xK_f     ), windows W.swapDown  )
-    , ((modm .|. shiftMask, xK_p     ), windows W.swapUp    )
-    , ((modm .|. shiftMask, xK_g     ), windows W.swapMaster)
+myKeys conf@(XConfig {XMonad.modMask = modm}) =
+   M.fromList $
+    let m  key cmd = ((modm, key), cmd)
+        s  key cmd = ((shiftMask, key), cmd)
+        sm key cmd = ((modm .|. shiftMask, key), cmd)
+        p  key cmd = ((0, key), cmd)
+    in
+      [
+      -- Define a number of win-X commands
+        m  xK_a         (spawn "emacsclient -c --no-wait")
+      , m  xK_r         (spawn "chromium --new-window")
+      , m  xK_s         (spawn "touch ~/.pomodoro_session")
+      , sm xK_s         (spawn "rm ~/.pomodoro_session")
+      , m  xK_space     (spawn "termite -e /bin/fish")
+      , m  xK_Tab       (spawn "password-store")
+      , m  xK_semicolon (spawn captureCmd)
+      , m  xK_d         (kill)
+      , m  xK_q         (sendMessage Shrink)
+      , m  xK_w         (sendMessage Expand)
+      , m  xK_f         (windows W.focusUp)
+      , m  xK_p         (windows W.focusDown)
+      , m  xK_g         (windows W.focusMaster)
+      , sm xK_q         (sendMessage MirrorExpand)
+      , sm xK_w         (sendMessage MirrorShrink)
+      , sm xK_f         (windows W.swapDown  )
+      , sm xK_p         (windows W.swapUp    )
+      , sm xK_g         (windows W.swapMaster)
+      , m  xK_v         (sendMessage ToggleStruts)
+      , sm xK_v         (withFocused $ windows . W.sink)
+      , m  xK_b         (sendMessage NextLayout)
 
+      -- Override certain keys completely
+      , p 0x1008FF11    (spawn "~/bin/pulsevolume minus")
+      , p 0x1008FF13    (spawn "~/bin/pulsevolume plus")
+      , p 0x1008FF12    (spawn "~/bin/pulsevolume mute")
+      , p 0x1008ff02    (spawn "sudo ~/bin/brightness +33%")
+      , s 0x1008ff02    (spawn "sudo ~/bin/brightness 4437")
+      , p 0x1008ff03    (spawn "sudo ~/bin/brightness -33%")
+      , s 0x1008ff03    (spawn "sudo ~/bin/brightness 0")
+      , p xK_Home       (spawn "ezmon cycle")
+      , p xK_End        (spawn "ezmon reset")
+      ] ++
+    let wsKeys  = [xK_m, xK_comma, xK_period, xK_n, xK_e, xK_i, xK_l, xK_u, xK_y]
+        scrKeys = [xK_j, xK_h, xK_k]
+    in
 
-    , ((modm              , xK_c     ), sendMessage (IncMasterN 1))
-    , ((modm .|. shiftMask, xK_c     ), sendMessage (IncMasterN (-1)))
-    , ((modm              , xK_v     ), sendMessage ToggleStruts)
-    , ((modm .|. shiftMask, xK_v     ), withFocused $ windows . W.sink)
-    , ((modm,               xK_b ), sendMessage NextLayout)
+      -- Define keys for workspace switching
+      [((m .|. modm, k), windows $ f i) |
+          (i, k) <- zip (XMonad.workspaces conf) wsKeys,
+          (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]] ++
 
-    , ((0                 , 0x1008FF11), spawn "pulsevolume minus")
-    , ((0                 , 0x1008FF13), spawn "pulsevolume plus")
-    , ((0                 , 0x1008FF12), spawn "pulsevolume mute")
-    , ((0                 , 0x1008ff02), spawn "sudo brightness +33%")
-    , ((shiftMask         , 0x1008ff02), spawn "sudo brightness 4437")
-    , ((0                 , 0x1008ff03), spawn "sudo brightness -33%")
-    , ((shiftMask         , 0x1008ff03), spawn "sudo brightness 0")
-
-    , ((0                 , xK_Home    ), spawn "ezmon cycle")
-    , ((0                 , xK_End     ), spawn "ezmon reset")
-    ]
-    ++
-    [((m .|. modm, k), windows $ f i) | (i, k) <- zip (XMonad.workspaces conf) [xK_m, xK_comma, xK_period, xK_n, xK_e, xK_i, xK_l, xK_u, xK_y] , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
-    ++
-    [((m .|. modm, key), screenWorkspace sc >>= flip whenJust (windows . f))
-        | (key, sc) <- zip [xK_j, xK_h, xK_k] [0..]
-        , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
+      -- Define keys for screen switching
+      [((m .|. modm, k), screenWorkspace s >>= flip whenJust (windows . f))
+          | (k, s) <- zip scrKeys [0..]
+          , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
 
 myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
 
