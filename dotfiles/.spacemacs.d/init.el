@@ -11,6 +11,7 @@
    dotspacemacs-distribution               'spacemacs
    dotspacemacs-enable-lazy-installation   'unused
    dotspacemacs-ask-for-lazy-installation  t
+   dotspacemacs-configuration-layer-path   '("~/.spacemacs.d/local/")
 
 
    ;; Programming settings
@@ -105,13 +106,12 @@
    ;; Global toggles
    (fringe-mode '(0 . 8))
   )
-
-
 (defun dotspacemacs/layers ()
   (setq-default
    dotspacemacs-configuration-layers
    '(
      ;; Layers for general use
+     (my-org :location local)
      git
      org
      themes-megapack
@@ -152,7 +152,6 @@
 
      (purescript)
      )))
-
 (defun dotspacemacs/user-config ()
 
   (defadvice load-theme (before theme-dont-propagate activate)

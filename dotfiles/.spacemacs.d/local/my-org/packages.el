@@ -30,35 +30,34 @@
 ;;; Code:
 
 (defconst my-gtd-packages
-  '()
-  "The list of Lisp packages required by the my-gtd layer.
+  '(org))
 
-Each entry is either:
+(defconst my-gtd-dir
+  (expand-file-name "~/docs/org/"))
 
-1. A symbol, which is interpreted as a package to be installed, or
+(defconst my-gtd-files-alist
+  (--map (cons (car it) (expand-file-name (cdr it) my-gtd-dir))
+         '((inbox    . "inbox.org")
+           (agenda   . "agenda.org")
+           (projects . "projects.org")))
+  "An alist of paths to my various gtd files")
 
-2. A list of the form (PACKAGE KEYS...), where PACKAGE is the
-    name of the package to be installed or loaded, and KEYS are
-    any number of keyword-value-pairs.
+(defun my-gtd-file (x)
+  (cdr (assoc x my-gtd-files-alist)))
 
-    The following keys are accepted:
+(defun my-gtd/post-init-org ()
 
-    - :excluded (t or nil): Prevent the package from being loaded
-      if value is non-nil
+  (setq org-agenda-files (--map (cdr it) my-gtd-files-alist))
 
-    - :location: Specify a custom installation location.
-      The following values are legal:
+  ;; (setq org-capture-templates
+  ;;       '(
+  ;;         ("t" "Todo" entry
+  ;;          (file+headline (my-gtd-file 'inbox) "Todos")
+  ;;          "* TODO %i%?")
 
-      - The symbol `elpa' (default) means PACKAGE will be
-        installed using the Emacs package manager.
+  ;;         ("T" "Tickler" entry
+  ;;          (file+headline (my-gtd-file 'tickler))))))
 
-      - The symbol `local' directs Spacemacs to load the file at
-        `./local/PACKAGE/PACKAGE.el'
-
-      - A list beginning with the symbol `recipe' is a melpa
-        recipe.  See: https://github.com/milkypostman/melpa#recipe-format")
-
-
-(defconst testing-silly-things 3)
+  )
 
 ;;; packages.el ends here
