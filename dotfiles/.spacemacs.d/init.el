@@ -103,6 +103,7 @@
    dotspacemacs-loading-progress-bar       t
    )
 
+
    ;; Global toggles
    (fringe-mode '(0 . 8))
   )
@@ -110,6 +111,8 @@
   (setq-default
    dotspacemacs-configuration-layers
    '(
+     yaml
+     shell-scripts
      ;; Layers for general use
      (my-org :location local)
      git
@@ -121,6 +124,16 @@
       auto-completion-return-key-behavior              'complete
       auto-completion-tab-key-behavior                 'cycle
       auto-completion-enable-snippets-in-popup         t)
+     (shell
+      :variables
+      shell-default-shell 'ansi-term
+      shell-default-position 'bottom
+      shell-default-height 30
+      shell-default-term-shell "/bin/fish"
+      shell-default-full-span nil
+
+      )
+
      (syntax-checking
       :variables
       syntax-checking-enable-tooltips                  nil)
@@ -140,7 +153,7 @@
       :variables
       haskell-completion-backend     'intero
       haskell-enable-ghc-mod-support nil
-      haskell-process-type           'cabal-repl
+      haskell-process-type           'stack-ghci
       haskell-process-args-cabal-repl '("--ghc-options=-ferror-spans -fshow-loaded-modules"))
      (mu4e
       :variables
@@ -153,6 +166,16 @@
      (purescript)
      )))
 (defun dotspacemacs/user-config ()
+
+  ;; Little fix for shell-mode
+  (add-hook 'term-mode-hook 'toggle-truncate-lines)
+
+  ;; Some more customization for html-mode
+  (setq-default
+   web-mode-css-indent-offset    2
+   web-mode-code-indent-offset   2
+   web-mode-markup-indent-offset 2
+   css-indent-offset             2)
 
   (defadvice load-theme (before theme-dont-propagate activate)
     (mapcar #'disable-theme custom-enabled-themes))

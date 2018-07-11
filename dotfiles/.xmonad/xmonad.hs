@@ -153,6 +153,8 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) =
       , m  xK_r         (spawn "chromium --new-window")
       , m  xK_s         (spawn "touch ~/.pomodoro_session")
       , sm xK_s         (spawn "rm ~/.pomodoro_session")
+      , m  xK_t         (spawn "pavucontrol")
+      , sm xK_t         (spawn "xmonad --restart")
       , m  xK_space     (spawn "termite -e /bin/fish")
       , m  xK_Tab       (spawn "password-store")
       , m  xK_semicolon (spawn captureCmd)

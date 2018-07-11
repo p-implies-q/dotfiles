@@ -4,3 +4,6 @@
 3. funcs.el          - put all user-defined functions here
 4. config.el         - layer specific configuration
 5. keybindings.el    - specify key bindings
+* Tasks
+** TODO Testing test
+  [2018-07-03 Tue]

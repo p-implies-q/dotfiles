@@ -1,11 +1,18 @@
+# Define some useful aliases
+alias ls "ls --group-directories-first --color"
 
-# Set theme based on circumstances
-if set -q IN_NIX_SHELL
-   omf theme cbjohnson
-else
-    omf theme agnoster
+# Set the theme
+omf theme scorphish
+# set -x theme_color_scheme gruvbox
+
+# Disable the greeting
+set fish_greeting ""
+
+# Emacs ansi-term support
+if test -n "$EMACS"
+    set -x TERM eterm-color
 end
 
-set fish_greeting ""
-set -gx DEF_THEME agnoster
-set -gx NIX_SHELL_THEME cbjohnson
+function fish_title
+    true
+end
