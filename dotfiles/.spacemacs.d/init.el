@@ -207,6 +207,8 @@
    user-full-name     "David Janssen")
 
   (spacemacs/set-leader-keys "op" 'password-store-copy)
+  (spacemacs/set-leader-keys "oa" 'org-agenda)
+  (spacemacs/set-leader-keys "oc" 'org-capture)
   (define-key evil-motion-state-map "!" nil)
   (load-theme 'darktooth t)
 
