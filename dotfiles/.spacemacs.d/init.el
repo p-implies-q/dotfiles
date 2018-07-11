@@ -82,7 +82,7 @@
    custom-file                           "~/.spacemacs.d/custom.el"
 
    ;; Packages settings
-   dotspacemacs-additional-packages     '()
+   dotspacemacs-additional-packages     '(password-store)
    dotspacemacs-delete-orphan-packages  t
    dotspacemacs-excluded-packages       '(exec-path-from-shell
                                           org-projectile
@@ -206,6 +206,7 @@
    user-mail-address "janssen.dhj@gmail.com"
    user-full-name     "David Janssen")
 
+  (spacemacs/set-leader-keys "op" 'password-store-copy)
   (define-key evil-motion-state-map "!" nil)
   (load-theme 'darktooth t)
 
