@@ -113,8 +113,8 @@ myLayout = tiled
     tiled = avoidStruts . smartBorders $ ResizableTall 1 (3/100) (1/2) []
 
 myManageHook = composeAll
-    [ className =? "Gimp"           --> doFloat
-    , className =? "Inkscape"       --> doFloat
+    [ --className =? "Gimp"           --> doFloat
+      className =? "Inkscape"       --> doFloat
     , className =? "Matlab"         --> doFloat
     , className =? "Scribus"        --> doFloat
     , resource  =? "desktop_window" --> doIgnore

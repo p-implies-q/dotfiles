@@ -82,7 +82,9 @@
    custom-file                           "~/.spacemacs.d/custom.el"
 
    ;; Packages settings
-   dotspacemacs-additional-packages     '(password-store)
+   dotspacemacs-additional-packages     '(password-store
+                                          esh-autosuggest
+                                          )
    dotspacemacs-delete-orphan-packages  t
    dotspacemacs-excluded-packages       '(exec-path-from-shell
                                           org-projectile
@@ -111,27 +113,33 @@
   (setq-default
    dotspacemacs-configuration-layers
    '(
-     yaml
-     shell-scripts
      ;; Layers for general use
      (my-org :location local)
+     docker
      git
      org
+     shell-scripts
      themes-megapack
+     yaml
 
      (auto-completion
       :variables
       auto-completion-return-key-behavior              'complete
       auto-completion-tab-key-behavior                 'cycle
       auto-completion-enable-snippets-in-popup         t)
+     ;; (shell
+     ;;  :variables
+     ;;  shell-default-shell 'ansi-term
+     ;;  shell-default-position 'bottom
+     ;;  shell-default-height 30
+     ;;  shell-default-term-shell "/bin/fish"
+     ;;  shell-default-full-span nil
+     ;;  )
      (shell
       :variables
-      shell-default-shell 'ansi-term
+      shell-default-shell    'eshell
       shell-default-position 'bottom
-      shell-default-height 30
-      shell-default-term-shell "/bin/fish"
-      shell-default-full-span nil
-
+      shell-default-height   30
       )
 
      (syntax-checking
@@ -169,6 +177,7 @@
 
   ;; Little fix for shell-mode
   (add-hook 'term-mode-hook 'toggle-truncate-lines)
+  (add-hook 'eshell-mode-hook #'esh-autosuggest-mode)
 
   ;; Some more customization for html-mode
   (setq-default
