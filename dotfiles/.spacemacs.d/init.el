@@ -156,6 +156,7 @@
      html
      javascript
      markdown
+     nixos
 
      (haskell
       :variables
@@ -165,7 +166,9 @@
       haskell-process-args-cabal-repl '("--ghc-options=-ferror-spans -fshow-loaded-modules"))
      (mu4e
       :variables
-      mu4e-installation-path "/usr/share/emacs/site-lisp")
+      ;; mu4e-installation-path "/usr/share/emacs/site-lisp"
+      mu4e-installation-path "/run/current-system/sw/share/emacs/site-lisp/"
+      )
      (python
       :variables
       python-sort-imports-on-save t
