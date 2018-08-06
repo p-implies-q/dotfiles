@@ -5,6 +5,10 @@ alias ls "ls --group-directories-first --color"
 omf theme scorphish
 # set -x theme_color_scheme gruvbox
 
+# Set dircolors
+eval (dircolors -c ~/.dircolors)
+
+
 # Disable the greeting
 set fish_greeting ""
 
