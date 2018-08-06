@@ -2,18 +2,18 @@
 accounts = Gmail
 maxsyncaccounts = 1
 socktimeout = 30
-pythonfile = ~/.offlineimap.py
+pythonfile = /home/david/.offlineimap.py
 
 [Account Gmail]
 localrepository = Local
 remoterepository = Remote
 maxage = 1000
 autorefresh = 1
-postsynchook = mu index --maildir ~/docs/mail
+postsynchook = mu index --maildir /home/david/docs/mail
 
 [Repository Local]
 type = Maildir
-localfolders = ~/docs/mail
+localfolders = /home/david/docs/mail
 
 [Repository Remote]
 type = Gmail

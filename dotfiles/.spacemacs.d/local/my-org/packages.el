@@ -50,12 +50,25 @@
 
 
   (setq org-agenda-files (--map (cdr it) my-org-files-alist))
+
   (setq org-todo-keywords
         '("TODO(t)" "NEXT(n)" "WAITING(w)" "|" "DONE(d)" "CANCELED(c)" ))
+  (setq org-todo-keyword-faces
+        '(("TODO" . org-warning)
+          ("NEXT" . org-warning)))
+
   (setq org-tag-persistent-alist
         '(("@home"    . ?h)
           ("@gym"    . ?g)
           ("laptop"   . ?l)))
+
+  (setq org-agenda-custom-commands
+        '(("n" "Work for neurospin"
+           ((agenda "")
+            (tags-todo "jlab/NEXT")
+            (tags-todo "jlab/!-NEXT")
+            ))))
+
   (setq org-capture-templates
    `(("t" "Todo" entry
       (file+headline ,(my-org-file 'inbox) "Todos")
@@ -66,14 +79,20 @@
      ("d" "At date" entry
       (file+olp+datetree ,(my-org-file 'agenda))
       "* TODO %? %^G \n%^t")))
-  (setq org-startup-folded t)
-  (setq org-log-done nil)
-  (setq org-agenda-skip-scheduled-if-done t)
-  (setq org-agenda-skip-deadline-if-done t)
-  (setq org-agenda-skip-timestamp-if-done t)
-  (setq org-agenda-todo-ignore-deadlines t
-        org-agenda-todo-ignore-with-date t
-        org-agenda-todo-ignore-scheduled t)
+
+  (setq org-refile-targets '((nil :maxlevel . 9)
+                             (org-agenda-files :maxlevel . 9)))
+
+  (setq org-startup-folded                t
+        org-log-done                      nil
+        org-agenda-skip-scheduled-if-done t
+        org-agenda-skip-deadline-if-done  t
+        org-agenda-skip-timestamp-if-done t
+        org-agenda-todo-ignore-deadlines  t
+        org-agenda-todo-ignore-with-date  t
+        org-agenda-todo-ignore-scheduled  t
+        org-agenda-window-setup           'only-window
+        )
 
   )
 

@@ -9,7 +9,7 @@ def mailpasswd():
     try:
         return subprocess.check_output(args).strip()
     except subprocess.CalledProcessError:
-        return ""
+        return "It's all gone to hell"
 
 if __name__ == "__main__":
     print mailpasswd()
