@@ -12,6 +12,9 @@ eval (dircolors -c ~/.dircolors)
 fundle plugin 'tuvistavie/fish-ssh-agent'
 fundle init
 
+# Run keychain
+eval (keychain --eval --agents ssh -Q --quiet id_rsa --nogui)
+
 # Disable the greeting
 set fish_greeting ""
 
