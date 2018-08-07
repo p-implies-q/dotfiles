@@ -29,6 +29,8 @@ import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
 import qualified Data.Set        as S
 
+hostname :: IO String
+hostname = readFile "/etc/hostname"
 
 main :: IO ()
 main = do
@@ -57,9 +59,12 @@ main = do
         startupHook        = myStartupHook
         }
 
+myStartupHook :: X ()
 myStartupHook = do
   spawn "xsetroot -solid '#282828'"
-  spawn "setxkbmap us,us -variant colemak, -option ctrl:nocaps,ctrl:nocaps"
+  host <- io hostname
+  when ("brick" == host) $ do
+    spawn "setxkbmap us,us -variant colemak, -option ctrl:nocaps,ctrl:nocaps"
   spawn "xcape"
 
 myLogHook :: Handle -> X ()

@@ -61,6 +61,6 @@ Config {
 
         , Run StdinReader
 
-        , Run CommandReader "~/opt/pymodoro/pymodoro.py --auto-hide" "pomodoro"
+        , Run CommandReader "python ~/opt/pymodoro/pymodoro.py --auto-hide" "pomodoro"
         ]
    }
