@@ -144,6 +144,9 @@ captureCmd = "emacsclient -nc -F " ++ traits ++ " --eval " ++ cmd ++ " &>/tmp/er
     traits = show $ "(quote (name . " ++ name ++ "))"
     cmd    = show $ "(make-capture-frame)"
 
+launchCmd :: String
+launchCmd = "eval (yeganesh -x -- -fn 'Inconsolata:bold:pixelsize=17' -nb '#282828' -nf '#ebdbb2' -sb '#458588' -sf '#fbf1c7')"
+
 -- Hopefully all this will soon be replaced with hydras
 myKeys conf@(XConfig {XMonad.modMask = modm}) =
    M.fromList $
@@ -158,11 +161,12 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) =
       , m  xK_r         (spawn "chromium --new-window")
       , m  xK_s         (spawn "touch ~/.pomodoro_session")
       , sm xK_s         (spawn "rm ~/.pomodoro_session")
+      , m  xK_o         (spawn "termite")
       , m  xK_t         (spawn "pavucontrol")
       , sm xK_t         (spawn "xmonad --restart")
       , m  xK_space     (spawn "termite")
       , m  xK_Tab       (spawn "password-store")
-      , m  xK_semicolon (spawn captureCmd)
+      , m  xK_semicolon (spawn "eval $(yeganesh -x -- -fn 'Inconsolata:bold:pixelsize=17' -nb '#282828' -nf '#ebdbb2' -sb '#458588' -sf '#fbf1c7')" )
       , m  xK_d         (kill)
       , m  xK_q         (sendMessage Shrink)
       , m  xK_w         (sendMessage Expand)
