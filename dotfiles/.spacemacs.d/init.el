@@ -84,6 +84,7 @@
    ;; Packages settings
    dotspacemacs-additional-packages     '(password-store
                                           esh-autosuggest
+                                          keychain-environment
                                           )
    dotspacemacs-delete-orphan-packages  t
    dotspacemacs-excluded-packages       '(exec-path-from-shell
@@ -177,6 +178,8 @@
      (purescript)
      )))
 (defun dotspacemacs/user-config ()
+
+  (keychain-refresh-environment)
 
   ;; Little fix for shell-mode
   (add-hook 'term-mode-hook 'toggle-truncate-lines)
