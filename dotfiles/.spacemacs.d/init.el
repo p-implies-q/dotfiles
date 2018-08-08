@@ -178,6 +178,10 @@
      (purescript)
      )))
 (defun dotspacemacs/user-config ()
+  (setenv "PATH"
+          (concat
+           "/home/david/.local/bin:"
+           (getenv "PATH")))
 
   (keychain-refresh-environment)
 
@@ -224,6 +228,7 @@
   (spacemacs/set-leader-keys "op" 'password-store-copy)
   (spacemacs/set-leader-keys "oa" 'org-agenda)
   (spacemacs/set-leader-keys "oc" 'org-capture)
+  (spacemacs/set-leader-keys "ob" 'kill-some-buffers)
   (define-key evil-motion-state-map "!" nil)
   (load-theme 'darktooth t)
 
@@ -233,5 +238,8 @@
       (org-indent-mode    t)
       (auto-fill-mode     t)
       ))
+
+  ;; Add nix-mode to the automode alist
+  (add-to-list 'auto-mode-alist '("\\.nix\\'" . nix-mode))
 
   )

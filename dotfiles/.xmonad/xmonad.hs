@@ -1,6 +1,6 @@
 import XMonad
 
-
+import XMonad.Hooks.EwmhDesktops (ewmh)
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
@@ -29,15 +29,17 @@ import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
 import qualified Data.Set        as S
 
+import System.Taffybar.Support.PagerHints (pagerHints)
+
 hostname :: IO String
 hostname = readFile "/etc/hostname"
 
 main :: IO ()
 main = do
 
-  xmproc <- spawnPipe "xmobar /home/david/.xmobarrc"
+  -- xmproc <- spawnPipe "xmobar /home/david/.xmobarrc"
 
-  xmonad $ docks def {
+  xmonad $ docks $ ewmh $ pagerHints def {
         terminal           = myTerminal,
         focusFollowsMouse  = myFocusFollowsMouse,
         clickJustFocuses   = myClickJustFocuses,
@@ -55,17 +57,19 @@ main = do
         manageHook         = myManageHook,
         -- logHook            = myLogHook xmproc,
         -- logHook            = myLogHook2,
-        logHook            = myLogHook xmproc,
+        -- logHook            = myLogHook xmproc,
         startupHook        = myStartupHook
         }
 
 myStartupHook :: X ()
 myStartupHook = do
-  spawn "xsetroot -solid '#282828'"
+  spawn "feh --bg-scale /home/david/docs/wallpaper/forest.jpg"
   host <- io hostname
   when ("brick" == host) $ do
     spawn "setxkbmap us,us -variant colemak, -option ctrl:nocaps,ctrl:nocaps"
-  spawn "xcape"
+  spawn "compton"
+  spawn "stack exec taffybar"
+
 
 myLogHook :: Handle -> X ()
 myLogHook h = dynamicLogWithPP $ def
