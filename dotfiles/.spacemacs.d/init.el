@@ -178,11 +178,6 @@
      (purescript)
      )))
 (defun dotspacemacs/user-config ()
-  (setenv "PATH"
-          (concat
-           "/home/david/.local/bin:"
-           (getenv "PATH")))
-
   (keychain-refresh-environment)
 
   ;; Little fix for shell-mode

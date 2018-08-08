@@ -8,10 +8,6 @@ alias ls "ls --group-directories-first --color"
 # Set dircolors
 eval (dircolors -c ~/.dircolors)
 
-# Fundle plugins
-fundle plugin 'tuvistavie/fish-ssh-agent'
-fundle init
-
 # Run keychain
 
 # Disable the greeting

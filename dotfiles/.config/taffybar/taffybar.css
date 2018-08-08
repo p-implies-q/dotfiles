@@ -1,13 +1,28 @@
+/* Define macros from gruvbox */
+
+@define-color trans   rgba(0.0, 0.0, 0.0, 0.0);
+@define-color bg      #282828;
+@define-color fg      #ebdbb2;
+@define-color red     #cc241d;
+@define-color green   #95971a;
+@define-color yellow  #d79971;
+@define-color blue    #458588;
+@define-color purple  #b16286;
+@define-color aqua    #689d6a;
+@define-color gray    #a89984;
+
 @define-color transparent rgba(0.0, 0.0, 0.0, 0.0);
 @define-color white #FFFFFF;
 @define-color black #000000;
 @define-color taffy-blue #0c7cd5;
 
-@define-color active-window-color @white;
-@define-color urgent-window-color @taffy-blue;
-@define-color font-color @white;
-@define-color menu-background-color @white;
-@define-color menu-font-color @black;
+/* @define-color active-window-color @white; */
+/* @define-color urgent-window-color @taffy-blue; */
+/* @define-color font-color @white; */
+/* @define-color menu-background-color @white; */
+/* @define-color menu-font-color @black; */
+
+/* @define-color bg #282828; */
 
 /* Top level styling */
 
@@ -16,13 +31,13 @@
 	font-family: Inconsolata;
 	font-size: 17px;
   font-weight: bold;
-	color: @white;
+  color: @fg;
 }
 
 .taffy-box {
 	border-color: @white;
 	border-style: solid;
-  background-color: @transparent;
+  background-color: @bg;
 	border-radius: 0px;
 }
 

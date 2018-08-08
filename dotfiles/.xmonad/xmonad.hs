@@ -37,8 +37,6 @@ hostname = readFile "/etc/hostname"
 main :: IO ()
 main = do
 
-  -- xmproc <- spawnPipe "xmobar /home/david/.xmobarrc"
-
   xmonad $ docks $ ewmh $ pagerHints def {
         terminal           = myTerminal,
         focusFollowsMouse  = myFocusFollowsMouse,
@@ -52,72 +50,24 @@ main = do
         keys               = myKeys,
         mouseBindings      = myMouseBindings,
 
-      -- hooks, layouts
+        -- hooks, layouts
         layoutHook         = myLayout,
         manageHook         = myManageHook,
-        -- logHook            = myLogHook xmproc,
-        -- logHook            = myLogHook2,
-        -- logHook            = myLogHook xmproc,
         startupHook        = myStartupHook
         }
 
 myStartupHook :: X ()
 myStartupHook = do
-  spawn "feh --bg-scale /home/david/docs/wallpaper/forest.jpg"
+  spawn "feh --bg-scale /home/david/docs/wallpaper/lightbulb.jpg"
   host <- io hostname
   when ("brick" == host) $ do
     spawn "setxkbmap us,us -variant colemak, -option ctrl:nocaps,ctrl:nocaps"
-  spawn "compton"
+  -- spawn "compton"
   spawn "stack exec taffybar"
-
-
-myLogHook :: Handle -> X ()
-myLogHook h = dynamicLogWithPP $ def
-   {
-       ppCurrent           = \s ->  "[" ++ s ++ "]"
-     , ppVisible           = \s ->  "(" ++ s ++ ")"
-     , ppWsSep             = " "
-     , ppSep               = "   "
-     , ppLayout            = (\x -> case x of
-                                   "Spacing 10 ResizableTall"-> "V"
-                                   "ResizableTall"           -> ">"
-                                   "Full"                    -> "^"
-                                   _                         -> x
-                               )
-     , ppTitle             = take 40
-     , ppOutput            = hPutStrLn h
-   }
-
-myLogHook2 :: X ()
-myLogHook2 = do
-
-  dynamicLogWithPP $ def
-    {
-      ppCurrent       = \s -> "[" ++ s ++ "]"
-    , ppVisible       = id
-    , ppWsSep         = " "
-    , ppSep           = "  "
-    , ppLayout            = (\x -> case x of
-                                   "Spacing 10 ResizableTall"-> "V"
-                                   "ResizableTall"           -> ">"
-                                   "Full"                    -> "^"
-                                   _                         -> x
-                               )
-     , ppTitle             = take 40
-     , ppOutput            = send
-    }
-  where
-    send :: String -> IO ()
-    send s = do
-      sock <- socket AF_INET Stream 0
-      setSocketOption sock ReuseAddr 1
-      connect sock $ SockAddrInet 45678 $ tupleToHostAddress (127, 0, 0, 1)
-      sendAll sock . pack $ s
-      close sock
+  spawn "eval `keychain --eval --agents ssh id_rsa`"
 
 myLayout = tiled
-       ||| spacing 10 tiled
-       ||| noBorders (fullscreenFull Full)
+       ||| spacingRaw True (Border 0 10 10 10) True (Border 10 10 10 10) True tiled
   where
     tiled = avoidStruts . smartBorders $ ResizableTall 1 (3/100) (1/2) []
 
@@ -136,8 +86,8 @@ myClickJustFocuses  = False
 myModMask           = mod4Mask
 myWorkspaces        = map show [1..9]
 
-myBorderWidth = 2
-myNormalBorderColor = "#282828"
+myBorderWidth        = 2
+myNormalBorderColor  = "#282828"
 myFocusedBorderColor = "#928374"
 
 

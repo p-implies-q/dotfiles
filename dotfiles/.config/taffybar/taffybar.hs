@@ -3,6 +3,7 @@
 module Main where
 
 import System.Taffybar
+import System.Taffybar.Context (TaffyIO)
 import System.Taffybar.Hooks
 import System.Taffybar.Information.CPU
 import System.Taffybar.Information.Memory
@@ -13,34 +14,66 @@ import System.Taffybar.Widget.Generic.PollingLabel
 import System.Taffybar.Widget.Util
 import System.Taffybar.Widget.Workspaces
 
-transparent = (0.0, 0.0, 0.0, 0.0)
-yellow1 = (0.9453125, 0.63671875, 0.2109375, 1.0)
-yellow2 = (0.9921875, 0.796875, 0.32421875, 1.0)
-green1 = (0, 1, 0, 1)
-green2 = (1, 0, 1, 0.5)
-taffyBlue = (0.129, 0.588, 0.953, 1)
+import qualified GI.Gtk as Gtk
+
+type RGBA = (Double, Double, Double, Double)
+
+padding = 5
+
+
+-- | Set up the colors used for the graphs
+
+col :: (Double, Double, Double) -> RGBA
+col (a, b, c) = (a / 255, b / 255, c / 255, 1.0)
+
+bg      = col (0x28, 0x28, 0x28)
+dYellow = col (0xd7, 0x99, 0x21)
+lYellow = col (0xfa, 0xbd, 0x2f)
+dBlue   = col (0x45, 0x85, 0x88)
+lBlue   = col (0x83, 0xa5, 0x98)
+dAqua   = col (0x68, 0x9d, 0x6a)
+lAqua   = col (0x8e, 0xc0, 0x7c)
+
 
 myGraphConfig =
   defaultGraphConfig
-  { graphPadding = 0
-  , graphBorderWidth = 0
-  , graphWidth = 75
-  , graphBackgroundColor = transparent
+  { graphPadding         = padding
+  , graphBorderWidth     = 0
+  , graphWidth           = 75
+  , graphBackgroundColor = bg
+  , graphDirection       = RIGHT_TO_LEFT
   }
 
 netCfg = myGraphConfig
-  { graphDataColors = [yellow1, yellow2]
-  , graphLabel = Just "net"
+  { graphDataColors = [lYellow, dYellow]
+  , graphLabel      = Just "net"
   }
 
 memCfg = myGraphConfig
-  { graphDataColors = [taffyBlue]
-  , graphLabel = Just "mem"
+  { graphDataColors = [dBlue]
+  , graphLabel      = Just "mem"
   }
 
 cpuCfg = myGraphConfig
-  { graphDataColors = [green1, green2]
+  { graphDataColors = [lAqua, dAqua]
   , graphLabel = Just "cpu"
+  }
+
+noteConf = defaultNotificationConfig {notificationMaxTimeout = Just 5}
+
+myWorkspaceCfg =
+  defaultWorkspacesConfig
+  { minIcons        = 0
+  , maxIcons        = Just 3
+  , showWorkspaceFn = hideEmpty
+  }
+
+myLayoutConfig = defaultLayoutConfig
+  { formatLayout = \s -> return $ case s of
+      "ResizableTall"         -> ">>"
+      "Spacing ResizableTall" -> "> >"
+      "Full"                  -> "| |"
+      s                       -> s
   }
 
 memCallback :: IO [Double]
@@ -52,29 +85,29 @@ cpuCallback = do
   (_, systemLoad, totalLoad) <- cpuLoad
   return [totalLoad, systemLoad]
 
+pomo :: TaffyIO Gtk.Widget
+pomo = commandRunnerNew 0.5 "python" ["/home/david/opt/pymodoro/pymodoro.py", "--auto-hide", "--one-line"] "Woops"
+
 main = do
-  let myWorkspacesConfig =
-        defaultWorkspacesConfig
-        { minIcons = 1
-        , widgetGap = 0
-        , showWorkspaceFn = hideEmpty
-        }
-      workspaces = workspacesNew myWorkspacesConfig
+  let
+      workspaces = workspacesNew myWorkspaceCfg
       cpu = pollingGraphNew cpuCfg 0.5 cpuCallback
       mem = pollingGraphNew memCfg 1 memCallback
       net = networkGraphNew netCfg Nothing
-      clock = textClockNew Nothing "%a %b %_d %r" 1
-      layout = layoutNew defaultLayoutConfig
+      clock = textClockNew Nothing " %a %m-%d:%H%M " 1
+      layout = layoutNew myLayoutConfig
       windows = windowsNew defaultWindowsConfig
-          -- See https://github.com/taffybar/gtk-sni-tray#statusnotifierwatcher
-          -- for a better way to set up the sni tray
-      tray = sniTrayThatStartsWatcherEvenThoughThisIsABadWayToDoIt
+
       myConfig = defaultSimpleTaffyConfig
         { startWidgets =
             workspaces : map (>>= buildContentsBox) [ layout, windows ]
+        , centerWidgets = map (>>= buildContentsBox)
+          [ pomo
+          , notifyAreaNew noteConf
+          ]
         , endWidgets = map (>>= buildContentsBox)
           [ clock
-          , tray
+          -- , tray
           , cpu
           , mem
           , net
@@ -82,8 +115,8 @@ main = do
           ]
         , barPosition = Top
         , barPadding = 0
-        , barHeight = 30
-        , widgetSpacing = 0
+        , barHeight = 22
+        , widgetSpacing = 5
         }
   dyreTaffybar $ withLogServer $ withToggleServer $
                toTaffyConfig myConfig
