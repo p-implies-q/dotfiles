@@ -9,6 +9,7 @@ alias ls "ls --group-directories-first --color"
 eval (dircolors -c ~/.dircolors)
 
 # Run keychain
+eval (keychain --eval --agents ssh -Q --quiet id_rsa --nogui)
 
 # Disable the greeting
 set fish_greeting ""
