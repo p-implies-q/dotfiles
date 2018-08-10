@@ -1,3 +1,5 @@
+export SHELL=/bin/fish
+
 export PATH=$PATH:/home/david/bin
 export PATH=$PATH:/home/david/.local/bin
 export PATH=$PATH:/home/david/.node_modules/bin
