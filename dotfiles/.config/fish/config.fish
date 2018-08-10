@@ -15,7 +15,7 @@ set fish_greeting ""
 eval (dircolors -c ~/.dircolors)
 
 set PATH "/home/david/proj/neurospin/bin" $PATH
-
+set PATH "/home/david/.emacs.d/bin" $PATH
 # Emacs ansi-term support
 if test -n "$EMACS"
     set -x TERM eterm-color
