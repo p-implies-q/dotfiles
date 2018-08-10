@@ -78,7 +78,11 @@
       "* TODO %? %^G \n%^T")
      ("d" "At date" entry
       (file+olp+datetree ,(my-org-file 'agenda))
-      "* TODO %? %^G \n%^t")))
+      "* TODO %? %^G \n%^t")
+     ("n" "Neurospin-todo" entry
+      (file+olp,(my-org-file 'projects) "Neurospin" "Inbox")
+      "* TODO %i%?")
+     ))
 
   (setq org-refile-targets '((nil :maxlevel . 9)
                              (org-agenda-files :maxlevel . 9)))

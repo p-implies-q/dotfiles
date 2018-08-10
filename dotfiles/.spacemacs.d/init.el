@@ -84,6 +84,7 @@
    ;; Packages settings
    dotspacemacs-additional-packages     '(password-store
                                           esh-autosuggest
+                                          keychain-environment
                                           )
    dotspacemacs-delete-orphan-packages  t
    dotspacemacs-excluded-packages       '(exec-path-from-shell
@@ -177,6 +178,7 @@
      (purescript)
      )))
 (defun dotspacemacs/user-config ()
+  (keychain-refresh-environment)
 
   ;; Little fix for shell-mode
   (add-hook 'term-mode-hook 'toggle-truncate-lines)
@@ -221,6 +223,7 @@
   (spacemacs/set-leader-keys "op" 'password-store-copy)
   (spacemacs/set-leader-keys "oa" 'org-agenda)
   (spacemacs/set-leader-keys "oc" 'org-capture)
+  (spacemacs/set-leader-keys "ob" 'kill-some-buffers)
   (define-key evil-motion-state-map "!" nil)
   (load-theme 'darktooth t)
 
@@ -230,5 +233,8 @@
       (org-indent-mode    t)
       (auto-fill-mode     t)
       ))
+
+  ;; Add nix-mode to the automode alist
+  (add-to-list 'auto-mode-alist '("\\.nix\\'" . nix-mode))
 
   )
