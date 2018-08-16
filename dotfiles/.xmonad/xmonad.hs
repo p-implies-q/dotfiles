@@ -63,7 +63,7 @@ myStartupHook = do
   when ("brick" == host) $ do
     spawn "setxkbmap us,us -variant colemak, -option ctrl:nocaps,ctrl:nocaps"
   -- spawn "compton"
-  spawn "stack exec taffybar"
+  spawn "xmobar"
   spawn "eval `keychain --eval --agents ssh id_rsa`"
 
 myLayout = tiled
@@ -118,7 +118,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) =
       , m  xK_o         (spawn "termite")
       , m  xK_t         (spawn "pavucontrol")
       , sm xK_t         (spawn "xmonad --restart")
-      , m  xK_space     (spawn "termite")
+      -- , m  xK_space     (spawn "termite")
       , m  xK_Tab       (spawn "password-store")
       , m  xK_semicolon (spawn "eval $(yeganesh -x -- -fn 'Inconsolata:bold:pixelsize=17' -nb '#282828' -nf '#ebdbb2' -sb '#458588' -sf '#fbf1c7')" )
       , m  xK_d         (kill)

@@ -225,7 +225,7 @@
   (spacemacs/set-leader-keys "oc" 'org-capture)
   (spacemacs/set-leader-keys "ob" 'kill-some-buffers)
   (define-key evil-motion-state-map "!" nil)
-  (load-theme 'darktooth t)
+  (load-theme 'gruvbox t)
 
   ;; Configure org
   (add-hook 'org-mode-hook

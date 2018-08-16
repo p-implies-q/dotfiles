@@ -1,5 +1,6 @@
 # Define some useful aliases
 alias ls "ls --group-directories-first --color"
+alias nix-hask 'nix-env -f "<nixpkgs>" -qaP -A haskellPackages | grep '
 
 # Set the theme
 # omf theme scorphish
