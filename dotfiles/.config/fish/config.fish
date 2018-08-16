@@ -18,6 +18,7 @@ set fish_greeting ""
 eval (dircolors -c ~/.dircolors)
 
 set PATH "/home/david/proj/neurospin/bin" $PATH
+set PATH "/home/david/.emacs.d/bin" $PATH
 set PATH "/home/david/.local/bin" $PATH
 
 # Emacs ansi-term support
@@ -30,7 +31,8 @@ function fish_title
 end
 
 
-if [ "$TERM" = "linux" ]; then
+if [ "$TERM" = "linux" ]
+    then
     echo -en "\e]P0222222" #black
     echo -en "\e]P8222222" #darkgrey
     echo -en "\e]P1803232" #darkred
