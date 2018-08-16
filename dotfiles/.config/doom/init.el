@@ -2,7 +2,7 @@
 ;; Copy me to ~/.doom.d/init.el or ~/.config/doom/init.el, then edit me!
 
 (doom! :feature
-      ;debugger          ; FIXME stepping through code, to help you add bugs
+      debugger          ; FIXME stepping through code, to help you add bugs
        eval              ; run code, run (also, repls)
        (evil +everywhere); come to the dark side, we have cookies
        file-templates    ; auto-snippets for empty files
@@ -32,7 +32,6 @@
        evil-goggles      ; display visual hints when editing in evil
       ;fci               ; a `fill-column' indicator
        hl-todo           ; highlight TODO/FIXME/NOTE tags
-      ;modeline          ; snazzy, Atom-inspired modeline, plus API
        nav-flash         ; blink the current line after jumping
       ;neotree           ; a project drawer, like NERDTree for vim
        treemacs          ; a project drawer, like neotree but cooler
@@ -41,7 +40,7 @@
         +defaults)       ; default popup rules
        pretty-code       ; replace bits of code with pretty symbols
        ;tabbar            ; FIXME an (incomplete) tab bar for Emacs
-       ;unicode           ; extended unicode support for various languages
+       unicode           ; extended unicode support for various languages
        vc-gutter         ; vcs diff in the fringe
        vi-tilde-fringe   ; fringe tildes to mark beyond EOB
        window-select     ; visually switch windows
@@ -55,25 +54,24 @@
        dired             ; making dired pretty [functional]
        ediff             ; comparing files in Emacs
        electric          ; smarter, keyword-based electric-indent
-      ;eshell            ; a consistent, cross-platform shell (WIP)
+       eshell            ; a consistent, cross-platform shell (WIP)
        hideshow          ; basic code-folding support
        imenu             ; an imenu sidebar and searchable code index
-      ;term              ; terminals in Emacs
+       term              ; terminals in Emacs
        vc                ; version-control and Emacs, sitting in a tree
 
        :tools
        editorconfig      ; let someone else argue about tabs vs spaces
       ;ein               ; tame Jupyter notebooks with emacs
       ;gist              ; interacting with github gists
-      ;macos             ; MacOS-specific commands
-      ;make              ; run make tasks from Emacs
-      ;magit             ;
-      ;password-store    ; password manager for nerds
-      ;pdf               ; pdf enhancements
+       make              ; run make tasks from Emacs
+       magit             ;
+       password-store    ; password manager for nerds
+       pdf               ; pdf enhancements
       ;prodigy           ; FIXME managing external services & code builders
       ;rgb               ; creating color strings
-      ;tmux              ; an API for interacting with tmux
-      ;upload            ; map local to remote projects via ssh/ftp
+       tmux              ; an API for interacting with tmux
+       upload            ; map local to remote projects via ssh/ftp
       ;wakatime
 
        :lang
@@ -128,24 +126,14 @@
        ;; toward a specific purpose. They may have additional dependencies and
        ;; should be loaded late.
        :app
-       (email +gmail
-              :config
-
-
-;;; ~
-;;;
-;;;/.doom.d/config.el -*- lexical-binding: t; -*-
-
-
-              ;; Each path is relative to `+email-mu4e-mail-path', which is ~/.mail by default
-
-              )    ; emacs as an email client
+       (email +gmail)    ; emacs as an email client
        irc               ; how neckbeards socialize
       ;(rss +org)        ; emacs as an RSS reader
       ;twitter           ; twitter client https://twitter.com/vnought
        (write            ; emacs as a word processor (latex + org + markdown)
         +wordnut         ; wordnet (wn) search
         +langtool)       ; a proofreader (grammar/style check) for Emacs
+       chess
 
        :collab
       ;floobits          ; peer programming for a price
