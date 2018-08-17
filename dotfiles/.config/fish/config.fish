@@ -1,7 +1,7 @@
 # Define some useful aliases
 alias ls "ls --group-directories-first --color"
 alias nix-hask 'nix-env -f "<nixpkgs>" -qaP -A haskellPackages | grep '
-
+alias bgset "feh --bg-scale"
 # Set the theme
 # omf theme scorphish
 # set -x theme_color_scheme gruvbox
@@ -20,6 +20,7 @@ eval (dircolors -c ~/.dircolors)
 set PATH "/home/david/proj/neurospin/bin" $PATH
 set PATH "/home/david/.emacs.d/bin" $PATH
 set PATH "/home/david/.local/bin" $PATH
+set PATH "/home/david/.emacs.d/bin" $PATH
 
 # Emacs ansi-term support
 if test -n "$EMACS"

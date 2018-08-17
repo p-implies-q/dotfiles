@@ -64,7 +64,7 @@ noteConf = defaultNotificationConfig {notificationMaxTimeout = Just 5}
 myWorkspaceCfg =
   defaultWorkspacesConfig
   { minIcons        = 0
-  , maxIcons        = Just 3
+  , maxIcons        = Just 3 
   , showWorkspaceFn = hideEmpty
   }
 

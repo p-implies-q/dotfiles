@@ -6,38 +6,39 @@ import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
 
 import XMonad.Util.Run(spawnPipe)
-import XMonad.Util.Ungrab (unGrab)
+-- import XMonad.Util.Ungrab (unGrab)
 
 
 import XMonad.Layout.NoBorders
 import XMonad.Layout.Spacing
 import XMonad.Layout.ResizableTile
-import XMonad.Layout.Fullscreen
+-- import XMonad.Layout.Fullscreen
 
 import System.IO
-import System.Exit
-import System.Process (callCommand)
+-- import System.Exit
+-- import System.Process (callCommand)
 
-import Network.Socket hiding (sendAll)
-import Network.Socket.ByteString.Lazy (sendAll)
+-- import Network.Socket hiding (sendAll)
+-- import Network.Socket.ByteString.Lazy (sendAll)
 
-import Data.ByteString.Lazy.Char8 (pack)
-import Data.Monoid
+-- import Data.ByteString.Lazy.Char8 (pack)
+-- import Data.Monoid
 import Control.Monad (when)
 
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
-import qualified Data.Set        as S
+-- import qualified Data.Set        as S
 
-import System.Taffybar.Support.PagerHints (pagerHints)
 
 hostname :: IO String
 hostname = readFile "/etc/hostname"
 
+
 main :: IO ()
 main = do
 
-  xmonad $ docks $ ewmh $ pagerHints def {
+  xmproc <- spawnPipe "xmobar /home/david/.xmobarrc"
+  xmonad $ docks $ ewmh $ def {
         terminal           = myTerminal,
         focusFollowsMouse  = myFocusFollowsMouse,
         clickJustFocuses   = myClickJustFocuses,
@@ -52,13 +53,14 @@ main = do
 
         -- hooks, layouts
         layoutHook         = myLayout,
+        logHook            = myLogHook xmproc,
         manageHook         = myManageHook,
         startupHook        = myStartupHook
         }
 
 myStartupHook :: X ()
 myStartupHook = do
-  spawn "feh --bg-scale /home/david/docs/wallpaper/lightbulb.jpg"
+  spawn "feh --bg-scale /home/david/docs/wallpaper/forest.jpg"
   host <- io hostname
   when ("brick" == host) $ do
     spawn "setxkbmap us,us -variant colemak, -option ctrl:nocaps,ctrl:nocaps"
@@ -67,7 +69,8 @@ myStartupHook = do
   spawn "eval `keychain --eval --agents ssh id_rsa`"
 
 myLayout = tiled
-       ||| spacingRaw True (Border 0 10 10 10) True (Border 10 10 10 10) True tiled
+       -- ||| spacingRaw True (Border 0 10 10 10) True (Border 10 10 10 10) True tiled
+          ||| spacing (10 :: Int) tiled
   where
     tiled = avoidStruts . smartBorders $ ResizableTall 1 (3/100) (1/2) []
 
@@ -169,3 +172,21 @@ myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm, button3), (\w -> focus w >> mouseResizeWindow w
                                        >> windows W.shiftMaster))
     ]
+
+
+myLogHook :: Handle -> X ()	
+myLogHook h = dynamicLogWithPP $ def	
+   {	
+       ppCurrent           = \s ->  "[" ++ s ++ "]"	
+     , ppVisible           = \s ->  "(" ++ s ++ ")"	
+     , ppWsSep             = " "	
+     , ppSep               = "   "	
+     , ppLayout            = (\x -> case x of	
+                                   "Spacing 10 ResizableTall"-> "V"	
+                                   "ResizableTall"           -> ">"	
+                                   "Full"                    -> "^"	
+                                   _                         -> x	
+                               )	
+     , ppTitle             = take 40	
+     , ppOutput            = hPutStrLn h	
+   }

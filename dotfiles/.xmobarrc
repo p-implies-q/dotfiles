@@ -5,9 +5,9 @@ Config {
    , bgColor =      "#282828"
    , fgColor =      "#ebdbb2"
    , position =     Top
-   , border =       BottomB
+   , border =       NoBorder
    , borderColor =  "#282828"
-
+   , alpha =        0
    -- layout
    , sepChar =  "%"   -- delineator between plugin names and straight text
    , alignSep = "}{"  -- separator between left-right alignment
