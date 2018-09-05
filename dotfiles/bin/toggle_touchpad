@@ -1,0 +1,10 @@
+#!/bin/sh
+
+if xinput list-props 19 | grep -q 'Enabled.*1$'; then
+    # echo "Enabled"
+    xinput --disable 19
+else
+    # echo "Disabled"
+    xinput --enable 19
+fi
+       
