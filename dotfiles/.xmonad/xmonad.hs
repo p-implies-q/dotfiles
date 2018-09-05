@@ -149,6 +149,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) =
       , s 0x1008ff03    (spawn "sudo ~/bin/brightness 0")
       , p xK_Home       (spawn "ezmon cycle")
       , p xK_End        (spawn "ezmon reset")
+      , p xK_Insert     (spawn "toggle_touchpad")
       ] ++
     let wsKeys  = [xK_m, xK_comma, xK_period, xK_n, xK_e, xK_i, xK_l, xK_u, xK_y]
         scrKeys = [xK_j, xK_h, xK_k]
