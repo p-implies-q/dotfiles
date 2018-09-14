@@ -38,7 +38,7 @@ main :: IO ()
 main = do
 
   xmproc <- spawnPipe "xmobar /home/david/.xmobarrc"
-  xmonad $ docks $ ewmh $ def {
+  xmonad $ docks $ def {
         terminal           = myTerminal,
         focusFollowsMouse  = myFocusFollowsMouse,
         clickJustFocuses   = myClickJustFocuses,
