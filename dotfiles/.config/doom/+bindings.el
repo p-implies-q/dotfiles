@@ -3,9 +3,11 @@
 
 (map!
   (:leader
-    (:desc "helm-mini" :nv "a" #'helm-mini)
-    (:desc "mu4e"      :nv "m" #'mu4e)))
+    :desc "helm-mini" :nv "a" #'helm-mini
+    :desc "mu4e"      :nv "m" #'mu4e
 
-(map!
-  :nv "C-a" #'helm-mini)
+    (:desc "+search" :prefix "/"
+      :desc "swiper" :n "/" #'swiper-helm)
+    )
+  :nmvo "C-a" #'helm-mini)
 
