@@ -1,3 +1,7 @@
+set SHELL (which fish)
+
+eval (python3 -m virtualfish)
+
 # Define some useful aliases
 alias ls "ls --group-directories-first --color"
 alias nix-hask 'nix-env -f "<nixpkgs>" -qaP -A haskellPackages | grep '
@@ -17,10 +21,8 @@ set fish_greeting ""
 
 eval (dircolors -c ~/.dircolors)
 
-set PATH "/home/david/proj/neurospin/bin" $PATH
-set PATH "/home/david/.emacs.d/bin" $PATH
-set PATH "/home/david/.local/bin" $PATH
-set PATH "/home/david/.emacs.d/bin" $PATH
+set PATH "$HOME/.emacs.d/bin" $PATH
+set PATH "$HOME/.local/bin" $PATH
 
 # Emacs ansi-term support
 if test -n "$EMACS"
