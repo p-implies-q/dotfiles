@@ -13,15 +13,15 @@ alias bgset "feh --bg-scale"
 eval (dircolors -c ~/.dircolors)
 
 # Run keychain
-eval (keychain --eval --agents ssh -Q --quiet id_rsa --nogui) >/dev/null 2>&1
+eval (keychain --eval --agents ssh -Q --quiet id_rsa --nogui ^/dev/null)
 
 # Run the virtualenvwrapper for python
-eval (python3 -m virtualfish) >/dev/null 2>&1
+eval (python3 -m virtualfish ^/dev/null)
 
 # Disable the greeting
 set fish_greeting ""
 
-eval (dircolors -c ~/.dircolors) >/dev/null 2>&1
+eval (dircolors -c ~/.dircolors)
 
 set PATH "$HOME/.emacs.d/bin" $PATH
 set PATH "$HOME/.local/bin" $PATH
