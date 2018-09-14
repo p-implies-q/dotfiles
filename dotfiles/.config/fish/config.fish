@@ -1,6 +1,5 @@
 set SHELL (which fish)
 
-eval (python3 -m virtualfish)
 
 # Define some useful aliases
 alias ls "ls --group-directories-first --color"
@@ -14,12 +13,15 @@ alias bgset "feh --bg-scale"
 eval (dircolors -c ~/.dircolors)
 
 # Run keychain
-eval (keychain --eval --agents ssh -Q --quiet id_rsa --nogui)
+eval (keychain --eval --agents ssh -Q --quiet id_rsa --nogui) >/dev/null 2>&1
+
+# Run the virtualenvwrapper for python
+eval (python3 -m virtualfish) >/dev/null 2>&1
 
 # Disable the greeting
 set fish_greeting ""
 
-eval (dircolors -c ~/.dircolors)
+eval (dircolors -c ~/.dircolors) >/dev/null 2>&1
 
 set PATH "$HOME/.emacs.d/bin" $PATH
 set PATH "$HOME/.local/bin" $PATH
