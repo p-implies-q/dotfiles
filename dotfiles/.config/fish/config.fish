@@ -31,6 +31,8 @@ function fish_title
     true
 end
 
+# Disable __pycache__ directories
+set PYTHONDONTWRITEBYTECODE 1
 
 if [ "$TERM" = "linux" ]
     then
