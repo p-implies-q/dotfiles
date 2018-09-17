@@ -23,7 +23,6 @@ set fish_greeting ""
 
 eval (dircolors -c ~/.dircolors)
 
-set PATH "$HOME/.emacs.d/bin" $PATH
 set PATH "$HOME/.local/bin" $PATH
 
 # Emacs ansi-term support
