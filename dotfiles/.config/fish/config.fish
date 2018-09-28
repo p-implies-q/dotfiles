@@ -2,6 +2,7 @@
 alias ls "ls --group-directories-first --color"
 alias nix-hask 'nix-env -f "<nixpkgs>" -qaP -A haskellPackages | grep '
 alias bgset "feh --bg-scale"
+alias ec "emacsclient -nw"
 # Set the theme
 # omf theme scorphish
 # set -x theme_color_scheme gruvbox
