@@ -9,7 +9,7 @@ localrepository = Local
 remoterepository = Remote
 maxage = 1000
 autorefresh = 1
-postsynchook = mu index --maildir /home/david/docs/mail
+# postsynchook = mu index --maildir /home/david/docs/mail
 
 [Repository Local]
 type = Maildir

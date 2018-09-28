@@ -25,7 +25,8 @@
    dotspacemacs-whitespace-cleanup        'trailing
 
    ;; Appearance settings
-   dotspacemacs-themes                     '(spacemacs-dark
+   dotspacemacs-themes                     '(doom-one
+                                             spacemacs-dark
                                              leuven)
    dotspacemacs-default-font               '("Mononoki Nerd Font"
                                              :size 16
@@ -85,6 +86,7 @@
    dotspacemacs-additional-packages     '(password-store
                                           esh-autosuggest
                                           keychain-environment
+                                          doom-themes
                                           )
    dotspacemacs-delete-orphan-packages  t
    dotspacemacs-excluded-packages       '(exec-path-from-shell
@@ -161,9 +163,9 @@
 
      (haskell
       :variables
-      haskell-completion-backend     'intero
+      ;; haskell-completion-backend     'dante
       haskell-enable-ghc-mod-support nil
-      haskell-process-type           'stack-ghci
+      haskell-process-type           'cabal-repl
       haskell-process-args-cabal-repl '("--ghc-options=-ferror-spans -fshow-loaded-modules"))
      (mu4e
       :variables
@@ -225,7 +227,7 @@
   (spacemacs/set-leader-keys "oc" 'org-capture)
   (spacemacs/set-leader-keys "ob" 'kill-some-buffers)
   (define-key evil-motion-state-map "!" nil)
-  (load-theme 'gruvbox t)
+  (load-theme 'doom-one t)
 
   ;; Configure org
   (add-hook 'org-mode-hook

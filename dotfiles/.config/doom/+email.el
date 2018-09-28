@@ -15,7 +15,7 @@
 
   (setq mu4e-maildir (expand-file-name "~/docs/mail"))
   (setq mu4e-attachment-dir (expand-file-name "~/docs/attachments"))
-  (setq mu4e-get-mail-command "offlineimap")
+  (setq mu4e-get-mail-command "offlineimap -o")
   (setq mu4e-hide-index-messages nil)
 
 

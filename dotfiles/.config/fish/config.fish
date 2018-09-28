@@ -1,3 +1,6 @@
+set SHELL (which fish)
+
+
 # Define some useful aliases
 alias ls "ls --group-directories-first --color"
 alias nix-hask 'nix-env -f "<nixpkgs>" -qaP -A haskellPackages | grep '
@@ -11,17 +14,17 @@ alias ec "emacsclient -nw"
 eval (dircolors -c ~/.dircolors)
 
 # Run keychain
-eval (keychain --eval --agents ssh -Q --quiet id_rsa --nogui)
+eval (keychain --eval --agents ssh -Q --quiet id_rsa --nogui ^/dev/null)
+
+# Run the virtualenvwrapper for python
+eval (python3 -m virtualfish ^/dev/null)
 
 # Disable the greeting
 set fish_greeting ""
 
 eval (dircolors -c ~/.dircolors)
 
-set PATH "/home/david/proj/neurospin/bin" $PATH
-set PATH "/home/david/.emacs.d/bin" $PATH
-set PATH "/home/david/.local/bin" $PATH
-set PATH "/home/david/.emacs.d/bin" $PATH
+set PATH "$HOME/.local/bin" $PATH
 
 # Emacs ansi-term support
 if test -n "$EMACS"
@@ -32,6 +35,8 @@ function fish_title
     true
 end
 
+# Disable __pycache__ directories
+set PYTHONDONTWRITEBYTECODE 1
 
 if [ "$TERM" = "linux" ]
     then

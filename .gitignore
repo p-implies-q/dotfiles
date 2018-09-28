@@ -10,3 +10,4 @@
 /dotfiles/.config/fish/fishd.herbert
 /dotfiles/.ghc
 /dotfiles/.stack
+/dotfiles/bin/grabber
