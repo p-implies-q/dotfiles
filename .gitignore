@@ -8,6 +8,7 @@
 /dotfiles/.xmonad/xmonad.hi
 /dotfiles/.config/htop/htoprc
 /dotfiles/.config/fish/fishd.herbert
+/dotfiles/.config/fish/functions/fish_prompt.fish
 /dotfiles/.ghc
 /dotfiles/.stack
 /dotfiles/bin/grabber
