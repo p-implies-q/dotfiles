@@ -11,3 +11,4 @@
 /dotfiles/.ghc
 /dotfiles/.stack
 /dotfiles/bin/grabber
+/dotfiles/bin/pusher

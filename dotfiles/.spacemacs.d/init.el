@@ -222,6 +222,8 @@
    user-mail-address "janssen.dhj@gmail.com"
    user-full-name     "David Janssen")
 
+  (setq magit-display-buffer-function 'switch-to-buffer)
+
   (spacemacs/set-leader-keys "op" 'password-store-copy)
   (spacemacs/set-leader-keys "oa" 'org-agenda)
   (spacemacs/set-leader-keys "oc" 'org-capture)
