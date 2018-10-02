@@ -14,3 +14,12 @@
 /dotfiles/.stack
 /dotfiles/bin/grabber
 /dotfiles/bin/pusher
+/dotfiles/.config/fish/functions/__z.fish
+/dotfiles/.config/fish/functions/__z_add.fish
+/dotfiles/.config/fish/functions/__z_clean.fish
+/dotfiles/.config/fish/functions/__z_complete.fish
+/dotfiles/.config/fish/functions/fish_right_prompt.fish
+/dotfiles/.config/fish/functions/fisher.fish
+/dotfiles/.config/fish/functions/z.awk
+/dotfiles/.config/fish/functions/zadd.awk
+/dotfiles/.config/fish/functions/zclean.awk

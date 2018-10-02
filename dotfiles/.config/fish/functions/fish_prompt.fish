@@ -1,1 +1,1 @@
-/home/david/.local/share/omf/themes/lambda/fish_prompt.fish
+/home/david/.config/fisherman/lambda/fish_prompt.fish
