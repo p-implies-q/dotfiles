@@ -5,4 +5,6 @@
 
 
 
-(setq projectile-project-search-path '("~/proj/" "~/opt"))
+(setq projectile-project-search-path '("~/prj/" "~/opt"))
+
+(setq evil-snipe-scope 'whole-visible)

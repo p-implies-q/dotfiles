@@ -1,38 +1,27 @@
+
+
+
 import XMonad
 
-import XMonad.Hooks.EwmhDesktops (ewmh)
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
 
 import XMonad.Util.Run(spawnPipe)
--- import XMonad.Util.Ungrab (unGrab)
-
 
 import XMonad.Layout.NoBorders
 import XMonad.Layout.Spacing
 import XMonad.Layout.ResizableTile
--- import XMonad.Layout.Fullscreen
 
 import System.IO
--- import System.Exit
--- import System.Process (callCommand)
-
--- import Network.Socket hiding (sendAll)
--- import Network.Socket.ByteString.Lazy (sendAll)
-
--- import Data.ByteString.Lazy.Char8 (pack)
--- import Data.Monoid
 import Control.Monad (when)
 
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
--- import qualified Data.Set        as S
 
 
 hostname :: IO String
 hostname = readFile "/etc/hostname"
-
 
 main :: IO ()
 main = do

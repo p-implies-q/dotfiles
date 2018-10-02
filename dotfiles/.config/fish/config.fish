@@ -22,6 +22,7 @@ set fish_greeting ""
 
 
 set PATH "$HOME/.local/bin" $PATH
+set PATH "$HOME/.emacs.d/bin" $PATH
 
 # Emacs ansi-term support
 if test -n "$EMACS"
