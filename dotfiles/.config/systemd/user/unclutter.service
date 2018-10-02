@@ -4,7 +4,7 @@ PartOf = xsession.target
 
 [Service]
 Type = simple
-ExecStart = /usr/bin/unclutter
+ExecStart = /usr/bin/unclutter -idle 0.5
 
 [Install]
 WantedBy = xsession.target

@@ -9,12 +9,9 @@ executable my-xmonad
   build-depends:       base
                      , containers
                      , data-default
-                     -- , fuzzy
-                     -- , monoid-subclasses
                      , mtl
                      , process
                      , unix
-                     -- , utf8-string
                      , X11
                      , xmonad >= 0.14
                      , xmonad-contrib >= 0.14

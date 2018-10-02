@@ -1,1 +1,1 @@
-/home/david/.config/fisherman/lambda/fish_prompt.fish
+/home/david/.config/fisherman/bobthefish/fish_prompt.fish

@@ -1,6 +1,5 @@
 
 
-
 import XMonad
 
 import XMonad.Hooks.DynamicLog
@@ -49,13 +48,11 @@ main = do
 
 myStartupHook :: X ()
 myStartupHook = do
-  spawn "feh --bg-scale /home/david/docs/wallpaper/forest.jpg"
+  spawn "feh --bg-scale /home/david/dcs/wallpaper/forest.jpg"
   host <- io hostname
   when ("brick" == host) $ do
     spawn "setxkbmap us,us -variant colemak, -option ctrl:nocaps,ctrl:nocaps"
-  -- spawn "compton"
-  spawn "xmobar"
-  spawn "eval `keychain --eval --agents ssh id_rsa`"
+  spawn "compton"
 
 myLayout = tiled
        -- ||| spacingRaw True (Border 0 10 10 10) True (Border 10 10 10 10) True tiled
@@ -68,6 +65,8 @@ myManageHook = composeAll
       className =? "Inkscape"       --> doFloat
     , className =? "Matlab"         --> doFloat
     , className =? "Scribus"        --> doFloat
+    , className =? "Gimp"           --> doFloat
+    , className =? "Steam"          --> doFloat
     , resource  =? "desktop_window" --> doIgnore
     , manageDocks <+> manageHook def
     , isFullscreen --> doFullFloat ]
@@ -104,15 +103,15 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) =
       [
       -- Define a number of win-X commands
         m  xK_a         (spawn "emacsclient -c --no-wait")
-      , m  xK_r         (spawn "chromium --new-window")
+      , m  xK_r         (spawn "chromium-browser --new-window")
       , m  xK_s         (spawn "touch ~/.pomodoro_session")
       , sm xK_s         (spawn "rm ~/.pomodoro_session")
-      , m  xK_o         (spawn "termite")
+      , m  xK_o         (spawn "termite -e /usr/bin/fish")
       , m  xK_t         (spawn "pavucontrol")
       , sm xK_t         (spawn "xmonad --restart")
       -- , m  xK_space     (spawn "termite")
       , m  xK_Tab       (spawn "password-store")
-      , m  xK_semicolon (spawn "eval $(yeganesh -x -- -fn 'Inconsolata:bold:pixelsize=17' -nb '#282828' -nf '#ebdbb2' -sb '#458588' -sf '#fbf1c7')" )
+      , m  xK_semicolon (spawn "eval $(yeganesh -x -- -fn 'mononoki Nerd Font:bold:pixelsize=15' -nb '#282828' -nf '#ebdbb2' -sb '#458588' -sf '#fbf1c7')" )
       , m  xK_d         (kill)
       , m  xK_q         (sendMessage Shrink)
       , m  xK_w         (sendMessage Expand)

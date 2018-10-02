@@ -1,7 +1,7 @@
 Config {
 
    -- appearance
-     font =         "xft:SauceCodePro Nerd Font:size=11:bold:antialias=true"
+     font =         "xft:mononoki Nerd Font Mono:bold:9"
    , bgColor =      "#282828"
    , fgColor =      "#ebdbb2"
    , position =     Top
