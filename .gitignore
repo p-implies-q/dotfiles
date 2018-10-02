@@ -1,6 +1,7 @@
 *xmonad-x86_64-linux
 *xmonad.o
 *xmonad.state
+/dotfiles/.xmonad/.stack-work
 /dotfiles/.xmonad/xmonad.errors
 /dotfiles/.ghc/ghci_history
 /dotfile/.spacemacs.d/custom.el
