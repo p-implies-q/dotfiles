@@ -13,15 +13,15 @@ autorefresh = 1
 
 [Repository Local]
 type = Maildir
-localfolders = /home/david/docs/mail
+localfolders = /home/david/dcs/mail/gmail
 
 [Repository Remote]
 type = Gmail
 remoteuser = janssen.dhj@gmail.com
 remotepasseval = mailpasswd()
-realdelete = no
+realdelete = yes
 
-folderfilter = lambda fname: fname not in ['[Gmail]/Spam', '[Gmail]/All Mail', '[Gmail]/Starred', '[Gmail]/Important']
+folderfilter = lambda fname: fname not in ['[Gmail]/Important', '[Gmail]/Starred']
 
 holdconnectionopen = true
 keepalive = 60

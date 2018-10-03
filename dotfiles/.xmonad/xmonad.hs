@@ -139,8 +139,8 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) =
       [
       -- Define a number of win-X commands
         m  xK_a         (spawn "emacsclient -c --no-wait")
-      , m  xK_r         (spawn "qutebrowser")
-      , sm xK_r         (spawn "chromium-browser --new-window")
+      , sm xK_r         (spawn "qutebrowser")
+      ,  m xK_r         (spawn "chromium-browser --new-window")
       , m  xK_s         (spawn "termite -e /usr/bin/fish")
       , m  xK_t         (spawn "pavucontrol")
       , sm xK_t         (spawn "xmonad --recompile && xmonad --restart")
