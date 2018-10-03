@@ -1,22 +1,28 @@
 
 
-import XMonad
 
-import XMonad.Hooks.DynamicLog
-import XMonad.Hooks.ManageDocks
-import XMonad.Hooks.ManageHelpers
 
-import XMonad.Util.Run(spawnPipe)
+import           XMonad
 
-import XMonad.Layout.NoBorders
-import XMonad.Layout.Spacing
-import XMonad.Layout.ResizableTile
+import           XMonad.Hooks.DynamicLog
+import           XMonad.Hooks.ManageDocks
+import           XMonad.Hooks.ManageHelpers
 
-import System.IO
-import Control.Monad (when)
+import           XMonad.Util.Run             (spawnPipe)
 
-import qualified XMonad.StackSet as W
-import qualified Data.Map        as M
+import XMonad.Util.NamedScratchpad
+
+import           XMonad.Layout.NoBorders
+import           XMonad.Layout.ResizableTile
+import           XMonad.Layout.Spacing
+
+import           Control.Monad               (when)
+import           System.IO
+
+import qualified TaggedScratchpad as T
+
+import qualified Data.Map                    as M
+import qualified XMonad.StackSet             as W
 
 
 hostname :: IO String
@@ -42,17 +48,8 @@ main = do
         -- hooks, layouts
         layoutHook         = myLayout,
         logHook            = myLogHook xmproc,
-        manageHook         = myManageHook,
-        startupHook        = myStartupHook
+        manageHook         = myManageHook
         }
-
-myStartupHook :: X ()
-myStartupHook = do
-  spawn "feh --bg-scale /home/david/dcs/wallpaper/forest.jpg"
-  host <- io hostname
-  when ("brick" == host) $ do
-    spawn "setxkbmap us,us -variant colemak, -option ctrl:nocaps,ctrl:nocaps"
-  spawn "compton"
 
 myLayout = tiled
        -- ||| spacingRaw True (Border 0 10 10 10) True (Border 10 10 10 10) True tiled
@@ -60,16 +57,26 @@ myLayout = tiled
   where
     tiled = avoidStruts . smartBorders $ ResizableTall 1 (3/100) (1/2) []
 
+-- myManageHook :: Query (Endo WindowSet)
 myManageHook = composeAll
-    [ --className =? "Gimp"           --> doFloat
-      className =? "Inkscape"       --> doFloat
+    [ className =? "Inkscape"       --> doFloat
     , className =? "Matlab"         --> doFloat
     , className =? "Scribus"        --> doFloat
     , className =? "Gimp"           --> doFloat
     , className =? "Steam"          --> doFloat
+    , className =? "steam"          --> doFullFloat
     , resource  =? "desktop_window" --> doIgnore
+    , isDialog                      --> doCenterFloat
     , manageDocks <+> manageHook def
     , isFullscreen --> doFullFloat ]
+    <+> namedScratchpadManageHook myScratchpads
+
+myScratchpads :: [NamedScratchpad]
+myScratchpads =
+  [
+    NS "chromium" "chromium-browser" (className =? "chromium-browser") nonFloating
+  , NS "htop" "termite -e htop" (title =? "htop") nonFloating]
+
 
 myTerminal          = "termite"
 myFocusFollowsMouse = False
@@ -92,24 +99,51 @@ captureCmd = "emacsclient -nc -F " ++ traits ++ " --eval " ++ cmd ++ " &>/tmp/er
 launchCmd :: String
 launchCmd = "eval (yeganesh -x -- -fn 'Inconsolata:bold:pixelsize=17' -nb '#282828' -nf '#ebdbb2' -sb '#458588' -sf '#fbf1c7')"
 
--- Hopefully all this will soon be replaced with hydras
+myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
+
+    [ ((modm, button1), (\w -> focus w >> mouseMoveWindow w
+                                       >> windows W.shiftMaster))
+    , ((modm, button2), (\w -> focus w >> windows W.shiftMaster))
+    , ((modm, button3), (\w -> focus w >> mouseResizeWindow w
+                                       >> windows W.shiftMaster))
+    ]
+
+
+myLogHook :: Handle -> X ()
+myLogHook h = dynamicLogWithPP $ def
+   {
+       ppCurrent           = \s ->  "[" ++ s ++ "]"
+     , ppVisible           = \s ->  "(" ++ s ++ ")"
+     , ppWsSep             = " "
+     , ppSep               = "   "
+     , ppLayout            = (\x -> case x of
+                                   "Spacing 10 ResizableTall"-> "V"
+                                   "ResizableTall"            -> ">"
+                                   "Full"                     -> "^"
+                                   _                          -> x
+                               )
+     , ppTitle             = take 40
+     , ppOutput            = hPutStrLn h
+   }
+
+
+
 myKeys conf@(XConfig {XMonad.modMask = modm}) =
    M.fromList $
     let m  key cmd = ((modm, key), cmd)
         s  key cmd = ((shiftMask, key), cmd)
+        am key cmd = ((mod1Mask .|. modm, key), cmd)
         sm key cmd = ((modm .|. shiftMask, key), cmd)
         p  key cmd = ((0, key), cmd)
     in
       [
       -- Define a number of win-X commands
         m  xK_a         (spawn "emacsclient -c --no-wait")
-      , m  xK_r         (spawn "chromium-browser --new-window")
-      , m  xK_s         (spawn "touch ~/.pomodoro_session")
-      , sm xK_s         (spawn "rm ~/.pomodoro_session")
-      , m  xK_o         (spawn "termite -e /usr/bin/fish")
+      , m  xK_r         (spawn "qutebrowser")
+      , sm xK_r         (spawn "chromium-browser --new-window")
+      , m  xK_s         (spawn "termite -e /usr/bin/fish")
       , m  xK_t         (spawn "pavucontrol")
-      , sm xK_t         (spawn "xmonad --restart")
-      -- , m  xK_space     (spawn "termite")
+      , sm xK_t         (spawn "xmonad --recompile && xmonad --restart")
       , m  xK_Tab       (spawn "password-store")
       , m  xK_semicolon (spawn "eval $(yeganesh -x -- -fn 'mononoki Nerd Font:bold:pixelsize=15' -nb '#282828' -nf '#ebdbb2' -sb '#458588' -sf '#fbf1c7')" )
       , m  xK_d         (kill)
@@ -120,13 +154,17 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) =
       , m  xK_g         (windows W.focusMaster)
       , sm xK_q         (sendMessage MirrorExpand)
       , sm xK_w         (sendMessage MirrorShrink)
-      , sm xK_f         (windows W.swapDown  )
-      , sm xK_p         (windows W.swapUp    )
+      , sm xK_f         (windows W.swapUp)
+      , sm xK_p         (windows W.swapDown)
       , sm xK_g         (windows W.swapMaster)
       , m  xK_v         (sendMessage ToggleStruts)
       , sm xK_v         (withFocused $ windows . W.sink)
       , m  xK_b         (sendMessage NextLayout)
 
+
+      -- Scratchpad stuff
+      , am xK_a         (namedScratchpadAction myScratchpads "chromium")
+      , am xK_r         (namedScratchpadAction myScratchpads "htop")
       -- Override certain keys completely
       , p 0x1008FF11    (spawn "~/bin/pulsevolume minus")
       , p 0x1008FF13    (spawn "~/bin/pulsevolume plus")
@@ -152,30 +190,3 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) =
       [((m .|. modm, k), screenWorkspace s >>= flip whenJust (windows . f))
           | (k, s) <- zip scrKeys [0..]
           , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
-
-myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
-
-    [ ((modm, button1), (\w -> focus w >> mouseMoveWindow w
-                                       >> windows W.shiftMaster))
-    , ((modm, button2), (\w -> focus w >> windows W.shiftMaster))
-    , ((modm, button3), (\w -> focus w >> mouseResizeWindow w
-                                       >> windows W.shiftMaster))
-    ]
-
-
-myLogHook :: Handle -> X ()	
-myLogHook h = dynamicLogWithPP $ def	
-   {	
-       ppCurrent           = \s ->  "[" ++ s ++ "]"	
-     , ppVisible           = \s ->  "(" ++ s ++ ")"	
-     , ppWsSep             = " "	
-     , ppSep               = "   "	
-     , ppLayout            = (\x -> case x of	
-                                   "Spacing 10 ResizableTall"-> "V"	
-                                   "ResizableTall"           -> ">"	
-                                   "Full"                    -> "^"	
-                                   _                         -> x	
-                               )	
-     , ppTitle             = take 40	
-     , ppOutput            = hPutStrLn h	
-   }
