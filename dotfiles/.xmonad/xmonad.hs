@@ -1,7 +1,4 @@
 
-
-
-
 import           XMonad
 
 import           XMonad.Hooks.DynamicLog
@@ -10,7 +7,7 @@ import           XMonad.Hooks.ManageHelpers
 
 import           XMonad.Util.Run             (spawnPipe)
 
-import XMonad.Util.NamedScratchpad
+import           XMonad.Util.NamedScratchpad
 
 import           XMonad.Layout.NoBorders
 import           XMonad.Layout.ResizableTile
@@ -18,8 +15,6 @@ import           XMonad.Layout.Spacing
 
 import           Control.Monad               (when)
 import           System.IO
-
-import qualified TaggedScratchpad as T
 
 import qualified Data.Map                    as M
 import qualified XMonad.StackSet             as W
