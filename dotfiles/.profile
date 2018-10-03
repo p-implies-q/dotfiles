@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+
+
 export SHELL=/usr/bin/fish
 export EDITOR=/usr/bin/emacsclient
 

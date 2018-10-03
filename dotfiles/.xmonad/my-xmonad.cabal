@@ -6,7 +6,7 @@ cabal-version:       >=1.10
 
 executable my-xmonad
   main-is:             ../xmonad.hs
-  other-modules:       TaggedScratchpad
+  other-modules:
   build-depends:       base
                      , containers
                      , data-default
