@@ -125,22 +125,25 @@ myLogHook h = dynamicLogWithPP $ def
 
 myKeys conf@(XConfig {XMonad.modMask = modm}) =
    M.fromList $
-    let m  key cmd = ((modm, key), cmd)
-        s  key cmd = ((shiftMask, key), cmd)
-        am key cmd = ((mod1Mask .|. modm, key), cmd)
-        sm key cmd = ((modm .|. shiftMask, key), cmd)
-        p  key cmd = ((0, key), cmd)
+    let m  key cmd = ((modm,                 key), cmd)
+        am key cmd = ((modm .|. mod1Mask,    key), cmd)
+        sm key cmd = ((modm .|. shiftMask,   key), cmd)
+        cm key cmd = ((modm .|. controlMask, key), cmd)
+        s  key cmd = ((0    .|. shiftMask,   key), cmd)
+        p  key cmd = ((0,                    key), cmd)
     in
       [
       -- Define a number of win-X commands
-        m  xK_a         (spawn "emacsclient -c --no-wait")
+         m  xK_a         (spawn "emacs")
       , sm xK_r         (spawn "qutebrowser")
       ,  m xK_r         (spawn "chromium-browser --new-window")
-      , m  xK_s         (spawn "termite -e /usr/bin/fish")
+      , sm  xK_s         (spawn "xterm > /home/david/error")
+      , m xK_s         (spawn "termite -c `which fish`")
       , m  xK_t         (spawn "pavucontrol")
       , sm xK_t         (spawn "xmonad --recompile && xmonad --restart")
       , m  xK_Tab       (spawn "password-store")
       , m  xK_semicolon (spawn "eval $(yeganesh -x -- -fn 'mononoki Nerd Font:bold:pixelsize=15' -nb '#282828' -nf '#ebdbb2' -sb '#458588' -sf '#fbf1c7')" )
+      , cm xK_q         (spawn "pymodoro")
       , m  xK_d         (kill)
       , m  xK_q         (sendMessage Shrink)
       , m  xK_w         (sendMessage Expand)

@@ -3,8 +3,8 @@ Description=Emacs
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/emacs --fg-daemon
-ExecStop=/usr/bin/emacsclient --eval "(kill-emacs)"
+ExecStart=/run/current-system/sw/bin/emacs --fg-daemon
+ExecStop=/run/current-system/sw/bin/emacsclient --eval "(kill-emacs)"
 Environment=SSH_AUTH_SOCK=%t/keyring/ssh
 Restart=always
 

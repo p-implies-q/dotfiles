@@ -7,6 +7,10 @@ alias se       "sudo emacsclient -nw"
 alias magit    "emacsclient -e '(call-interactively #\'magit-status)'"
 alias keys     "eval (keychain --eval -Q --quiet id_rsa --nogui ^/dev/null)"
 
+# Setup the path
+set -gx PATH ~/.emacs.d/bin $PATH
+set -gx PATH ~/.bin         $PATH
+
 # Set dircolors
 eval (dircolors -c ~/.dircolors)
 

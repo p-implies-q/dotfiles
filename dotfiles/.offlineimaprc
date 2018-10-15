@@ -21,7 +21,7 @@ remoteuser = janssen.dhj@gmail.com
 remotepasseval = mailpasswd()
 realdelete = yes
 
-folderfilter = lambda fname: fname not in ['[Gmail]/Important', '[Gmail]/Starred']
+folderfilter = lambda fname: fname not in ['[Gmail]/Important', '[Gmail]/Starred', 'INBOX']
 
 holdconnectionopen = true
 keepalive = 60

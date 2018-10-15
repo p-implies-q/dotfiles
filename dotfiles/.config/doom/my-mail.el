@@ -54,7 +54,7 @@
   (setq mu4e-get-mail-command "offlineimap -o")
   (setq message-send-mail-function 'message-send-mail-with-sendmail
         message-kill-buffer-on-exit t
-        sendmail-program           "/usr/bin/msmtp"
+        sendmail-program           "msmtp"
         user-full-name             "David Janssen")
 
   (add-hook 'message-send-hook 'mml-secure-message-sign-pgpmime)
