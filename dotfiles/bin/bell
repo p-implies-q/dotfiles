@@ -11,7 +11,7 @@ import time
 
 
 LOGFILE = "/home/david/opt/dotfiles/meditation.log"
-SOUND_EFFECT ="/home/david/docs/audio/effects/bell.wav"
+SOUND_EFFECT ="/home/david/dcs/audio/effects/bell.wav"
 
 
 def ring_bell():
