@@ -1,7 +1,0 @@
-[user]
-	email = q.implies.r@gmail.com
-	name  = P->Q
-[core]
-	askpass =
-[diff]
-	tool = vimdiff

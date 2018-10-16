@@ -1,10 +1,10 @@
-export SHELL=/bin/fish
+#!/usr/bin/env bash
 
-export PATH=$PATH:/home/david/bin
-export PATH=$PATH:/home/david/.local/bin
-export PATH=$PATH:/home/david/.node_modules/bin
-export PATH=$PATH:/home/david/.psvm/current/bin
 
-export WORKON_HOME=/home/david/.envs
 
-export npm_config_prefix=~/.node_modules
+export SHELL=/usr/bin/fish
+export EDITOR=/usr/bin/emacsclient
+
+export PATH=$PATH:~/.bin
+export PATH=$PATH:~/.local/bin
+export PATH=$PATH:~/.cabal/bin

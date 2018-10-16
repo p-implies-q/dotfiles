@@ -1,5 +1,3 @@
-set SHELL (which fish)
-
 # Define some useful aliases
 alias ls       "ls --group-directories-first --color"
 alias nix-hask "nix-env -f '<nixpkgs>' -qaP -A haskellPackages | grep"
@@ -7,21 +5,17 @@ alias bgset    "feh --bg-scale"
 alias e        "emacsclient -nw"
 alias se       "sudo emacsclient -nw"
 alias magit    "emacsclient -e '(call-interactively #\'magit-status)'"
+alias keys     "eval (keychain --eval -Q --quiet id_rsa --nogui ^/dev/null)"
+
+# Setup the path
+set -gx PATH ~/.emacs.d/bin $PATH
+set -gx PATH ~/.bin         $PATH
 
 # Set dircolors
 eval (dircolors -c ~/.dircolors)
 
-# Run keychain
-eval (keychain --eval -Q --quiet id_rsa --nogui ^/dev/null)
-
-# Run the virtualenvwrapper for python
-eval (python3 -m virtualfish ^/dev/null)
-
 # Disable the greeting
 set fish_greeting ""
-
-
-set PATH "$HOME/.local/bin" $PATH
 
 # Emacs ansi-term support
 if test -n "$EMACS"

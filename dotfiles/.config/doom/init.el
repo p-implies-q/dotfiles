@@ -2,7 +2,7 @@
 ;; Copy me to ~/.doom.d/init.el or ~/.config/doom/init.el, then edit me!
 
 (doom! :feature
-      debugger          ; FIXME stepping through code, to help you add bugs
+      ;; debugger          ; FIXME stepping through code, to help you add bugs
        eval              ; run code, run (also, repls)
        (evil +everywhere); come to the dark side, we have cookies
        file-templates    ; auto-snippets for empty files
@@ -75,7 +75,7 @@
       ;assembly          ; assembly for fun or debugging
       ;(cc +irony +rtags); C/C++/Obj-C madness
       ;clojure           ; java with a lisp
-      ;common-lisp       ; if you've seen one lisp, you've seen them all
+      common-lisp       ; if you've seen one lisp, you've seen them all
       ;crystal           ; ruby at the speed of c
       ;csharp            ; unity, .NET, and mono shenanigans
        data              ; config/data formats
@@ -85,7 +85,7 @@
        emacs-lisp        ; drown in parentheses
       ;ess               ; emacs speaks statistics
       ;go                ; the hipster dialect
-       (haskell + dante); a language that's lazier than I am
+       (haskell +dante); a language that's lazier than I am
       ;hy                ; readability of scheme w/ speed of python
       ;(java +meghanada) ; the poster child for carpal tunnel syndrome
        javascript        ; all(hope(abandon(ye(who(enter(here))))))

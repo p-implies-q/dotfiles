@@ -1,0 +1,12 @@
+#!/usr/bin/env python
+
+import os
+
+POMO_FILE = os.path.join(os.getenv("HOME"), ".pomodoro_session")
+
+if __name__ == "__main__":
+    if os.path.exists(POMO_FILE):
+        os.remove(POMO_FILE)
+    else:
+        f = open(POMO_FILE, "w")
+        f.close()
